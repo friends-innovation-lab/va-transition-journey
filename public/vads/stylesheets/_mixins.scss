@@ -1,0 +1,477 @@
+//============ PORTED MIXINS FROM FORMATION ==============//
+
+// This is an override on Neat's media mixin to create media queries for both screen and print
+// https://github.com/thoughtbot/neat/blob/v1.8.0/app/assets/stylesheets/grid/_media.scss
+@use "sass:list";
+@use "../../dist/tokens/scss/variables.scss" as tokens;
+@use "./formation-overrides/variables" as fo-vars;
+@use "./functions" as *;
+
+// Make override functions available within this module
+@use "./override-function" as *;
+// Forward all mixins so they can be imported with @use "...mixins" as *
+@forward './override-function';
+
+// Define default feature:
+$default-feature: min-width;
+
+@mixin media($query: $feature $value $columns, $total-columns: fo-vars.$grid-columns) {
+  @if list.length($query) == 1 {
+    @media screen and ($default-feature: list.nth($query, 1)), print and ($default-feature: list.nth($query, 1)) {
+      $default-grid-columns: $grid-columns;
+      $grid-columns: $total-columns !global;
+      @content;
+      $grid-columns: $default-grid-columns !global;
+    }
+  } @else {
+    $loop-to: list.length($query);
+    $media-query: "screen and ";
+    $default-grid-columns: $grid-columns;
+    $grid-columns: $total-columns !global;
+
+    @if is-not(is-even(list.length($query))) {
+      $grid-columns: list.nth($query, $loop-to) !global;
+      $loop-to: $loop-to - 1;
+    }
+
+    $i: 1;
+    @while $i <= $loop-to {
+      $media-query: $media-query + "(" + list.nth($query, $i) + ": " + list.nth($query, $i + 1) + ") ";
+
+      @if ($i + 1) != $loop-to {
+        $media-query: $media-query + "and ";
+      }
+
+      $i: $i + 2;
+    }
+
+    // Append "print" at the end so that grid layouts always take effect on print.
+    $media-query: $media-query + ", print";
+
+    @media #{$media-query} {
+      @content;
+      $grid-columns: $default-grid-columns !global;
+    }
+  }
+}
+
+$focus-outline: 2px solid #{tokens.$vads-color-action-focus-on-light};
+$focus-spacing: 2px;
+
+// Focus state mixin
+@mixin focus {
+  outline: $focus-outline;
+  outline-offset: $focus-spacing;
+}
+
+// Used for creating the source string for fonts using @font-face
+// Reference: http://goo.gl/Ru1bKP
+
+@function font-url-prefixer($asset-pipeline) {
+  @if $asset-pipeline == true {
+    @return font-url;
+  } @else {
+    @return url;
+  }
+}
+
+@function font-source-declaration(
+  $font-family,
+  $file-path,
+  $asset-pipeline,
+  $file-formats,
+  $font-url) {
+
+  $src: ();
+
+  $formats-map: (
+    eot:   "#{$file-path}.eot?#iefix" format("embedded-opentype"),
+    woff2: "#{$file-path}.woff2" format("woff2"),
+    woff:  "#{$file-path}.woff" format("woff"),
+    ttf:   "#{$file-path}.ttf" format("truetype"),
+    svg:   "#{$file-path}.svg##{$font-family}" format("svg")
+  );
+
+  @each $key, $values in $formats-map {
+    @if contains($file-formats, $key) {
+      $file-path: list.nth($values, 1);
+      $font-format: list.nth($values, 2);
+
+      @if $asset-pipeline == true {
+        $src: append($src, font-url($file-path) $font-format, comma);
+      } @else {
+        $src: append($src, url($file-path) $font-format, comma);
+      }
+    }
+  }
+
+  @return $src;
+}
+
+$asset-pipeline: false;
+
+@mixin font-face(
+  $font-family,
+  $file-path,
+  $weight: normal,
+  $style: normal,
+  $asset-pipeline: $asset-pipeline,
+  $file-formats: eot woff2 woff ttf svg) {
+
+  $font-url-prefix: font-url-prefixer($asset-pipeline);
+
+  @font-face {
+    font-family: $font-family;
+    font-style: $style;
+    font-weight: $weight;
+
+    src: font-source-declaration(
+      $font-family,
+      $file-path,
+      $asset-pipeline,
+      $file-formats,
+      $font-url-prefix
+    );
+  }
+}
+
+/**
+  /uswds/dist/scss/lib/addons/_margin.scss
+**/
+@mixin margin($vals...) {
+  @include directional-property(margin, false, $vals...);
+}
+
+/**
+  uswds/src/stylesheets/lib/helpers/_directional-values.scss
+**/
+
+/// Directional-property mixins are shorthands for writing properties like the following
+///
+/// @ignore You can also use `false` instead of `null`.
+///
+/// @param {List} $vals
+///   List of directional values
+///
+/// @example scss - Usage
+///   .element {
+///     @include border-style(dotted null);
+///     @include margin(null 0 10px);
+///   }
+///
+/// @example css - CSS Output
+///   .element {
+///     border-bottom-style: dotted;
+///     border-top-style: dotted;
+///     margin-bottom: 10px;
+///     margin-left: 0;
+///     margin-right: 0;
+///   }
+///
+/// @require {function} contains-falsy
+///
+/// @return {List}
+
+@function collapse-directionals($vals) {
+  $output: null;
+
+  $a: list.nth($vals, 1);
+  $len: list.length($vals);
+
+  $b: $a;
+  @if $len >= 2 {
+    $b: list.nth($vals, 2);
+  }
+
+  $c: $a;
+  @if $len >= 3 {
+    $c: list.nth($vals, 3);
+  }
+
+  $d: $a;
+  @if $len >= 4 {
+    $d: list.nth($vals, 4);
+  } @else if $len >= 2 {
+    $d: list.nth($vals, 2);
+  }
+
+  @if $a == 0 { $a: 0; }
+  @if $b == 0 { $b: 0; }
+  @if $c == 0 { $c: 0; }
+  @if $d == 0 { $d: 0; }
+
+  @if $a == $b and $a == $c and $a == $d { $output: $a;          }
+  @else if $a == $c and $b == $d         { $output: $a $b;       }
+  @else if $b == $d                      { $output: $a $b $c;    }
+  @else                                  { $output: $a $b $c $d; }
+
+  @return $output;
+}
+
+/// Output directional properties, for instance `margin`.
+///
+/// @access private
+///
+/// @param {String} $pre
+///   Prefix to use
+/// @param {String} $suf
+///   Suffix to use
+/// @param {List} $vals
+///   List of values
+///
+/// @require {function} collapse-directionals
+/// @require {function} contains-falsy
+
+@mixin directional-property($pre, $suf, $vals) {
+  // Property Names
+  $suffix: "";
+  @if $suf {
+    $suffix: "-#{$suf}";
+  }
+
+  $top:    $pre + "-top"    + $suffix;
+  $bottom: $pre + "-bottom" + $suffix;
+  $left:   $pre + "-left"   + $suffix;
+  $right:  $pre + "-right"  + $suffix;
+  $all:    $pre +             $suffix;
+
+  $vals: collapse-directionals($vals);
+
+  @if contains-falsy($vals) {
+    @if list.nth($vals, 1) { #{$top}: list.nth($vals, 1); }
+
+    @if list.length($vals) == 1 {
+      @if list.nth($vals, 1) { #{$right}: list.nth($vals, 1); }
+    } @else {
+      @if list.nth($vals, 2) { #{$right}: list.nth($vals, 2); }
+    }
+
+    @if list.length($vals) == 2 {
+      @if list.nth($vals, 1) { #{$bottom}: list.nth($vals, 1); }
+      @if list.nth($vals, 2) { #{$left}:   list.nth($vals, 2); }
+    } @else if list.length($vals) == 3 {
+      @if list.nth($vals, 3) { #{$bottom}: list.nth($vals, 3); }
+      @if list.nth($vals, 2) { #{$left}:   list.nth($vals, 2); }
+    } @else if list.length($vals) == 4 {
+      @if list.nth($vals, 3) { #{$bottom}: list.nth($vals, 3); }
+      @if list.nth($vals, 4) { #{$left}:   list.nth($vals, 4); }
+    }
+  } @else {
+    #{$all}: $vals;
+  }
+}
+
+/// Provides a quick method for targeting `padding` on specific sides of a box. Use a `null` value to “skip” a side.
+///
+/// @param {Arglist} $vals
+///   List of arguments
+///
+/// @example scss - Usage
+///   .element {
+///     @include padding(12vh null 10px 5%);
+///   }
+///
+/// @example css - CSS Output
+///   .element {
+///     padding-bottom: 10px;
+///     padding-left: 5%;
+///     padding-top: 12vh;
+///   }
+///
+/// @require {mixin} directional-property
+///
+/// @output `padding`
+
+@mixin padding($vals...) {
+  @include directional-property(padding, false, $vals...);
+}
+
+/// Makes an element a outer container by centering it in the viewport, clearing its floats, and setting its `max-width`.
+/// Although optional, using `outer-container` is recommended. The mixin can be called on more than one element per page, as long as they are not nested.
+///
+/// @param {Number [unit]} $local-max-width [$max-width]
+///   Max width to be applied to the element. Can be a percentage or a measure.
+///
+/// @example scss - Usage
+///   .element {
+///     @include outer-container(100%);
+///   }
+///
+/// @example css - CSS Output
+///   .element {
+///     max-width: 100%;
+///     margin-left: auto;
+///     margin-right: auto;
+///   }
+///
+///   .element::after {
+///     clear: both;
+///     content: "";
+///     display: table;
+///   }
+
+@mixin outer-container($local-max-width: $max-width) {
+  @include clearfix;
+  max-width: $local-max-width;
+  margin: {
+    left: auto;
+    right: auto;
+  }
+}
+
+/// Provides an easy way to include a clearfix for containing floats.
+///
+/// @link http://cssmojo.com/latest_new_clearfix_so_far/
+///
+/// @example scss - Usage
+///   .element {
+///     @include clearfix;
+///   }
+///
+/// @example css - CSS Output
+///   .element::after {
+///     clear: both;
+///     content: "";
+///     display: table;
+///   }
+
+@mixin clearfix {
+  &::after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+}
+
+@mixin modal-close-button {
+  background-color: transparent;
+  color: fo-vars.$color-primary;
+  font-size: scale-rem(2.25rem);
+  padding: 0;
+  position: absolute;
+  margin: units(2);
+  right: 0;
+  top: 0;
+  width: auto;
+  z-index: 9;
+
+  &:hover {
+    background-color: transparent;
+    color: fo-vars.$color-primary-darker;
+  }
+
+  &:active {
+    background-color: transparent;
+    color: fo-vars.$color-primary-darkest;
+  }
+}
+
+// There are a few places where the exit-icon is explicitly hidden using prop / values
+// like 'background-image: none;'. In these cases, we want to hide the corresponding
+// content placed in the ::after pseudo-element
+@mixin no-sr-content {
+  &:after {
+    content: none;
+  }
+}
+
+@mixin color-transition {
+  -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+
+  -webkit-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+
+  // Transition only these properties.
+  -webkit-transition-property: color, background-color, border-color;
+  transition-property: color, background-color, border-color;
+}
+
+@mixin media-maxwidth($bp) {
+  @media screen and (max-width: #{$bp}) {
+    @content;
+  }
+}
+
+@mixin focus-gold-light-outline($offset: 2) {
+  outline: $focus-outline;
+  outline-offset: #{$offset}px;
+}
+
+@mixin modal-close-button {
+  background-color: transparent;
+  color: fo-vars.$color-primary;
+  font-size: scale-rem(2.25rem);
+  padding: 0;
+  position: absolute;
+  margin: units(2);
+  right: 0;
+  top: 0;
+  width: auto;
+  z-index: 9;
+
+  &:hover {
+    background-color: transparent;
+    color: fo-vars.$color-primary-darker;
+  }
+
+  &:active {
+    background-color: transparent;
+    color: fo-vars.$color-primary-darkest;
+  }
+}
+
+@mixin button-link {
+  background: none;
+  background-color: transparent !important;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  padding: 0 !important;
+  margin: 0;
+  text-align: left;
+  -webkit-font-smoothing: auto;
+  color: fo-vars.$color-link-default !important;
+  font-weight: normal;
+  text-decoration: underline;
+  display: inline;
+  width: auto !important;
+  line-height: inherit;
+  &:hover {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    outline: 0;
+    padding: 0 !important;
+    color: fo-vars.$color-link-default;
+    text-decoration: underline;
+    background-color: tokens.$color-link-default-hover !important;
+    @include color-transition;
+  }
+  &:active {
+    background: tokens.$color-link-default-hover;
+  }
+  &:focus {
+    @include focus-gold-light-outline;
+    outline-offset: 0;
+  }
+  &:disabled {
+    text-decoration: none;
+    color: fo-vars.$color-gray-light !important;
+  }
+}
+
+// Aria hidden helper
+@mixin accessibly-hidden() {
+  &[aria-hidden=true] {
+    display: none;
+  }
+}
+
+@mixin linear-gradient-background($from, $to) {
+  background: $from; /* Old browsers */
+  background: -moz-linear-gradient(top, $from 0%, $to 63%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, $from 0%,$to 63%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, $from 0%,$to 63%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$from, endColorstr=$to,GradientType=0 ); /* IE6-9 */
+}
