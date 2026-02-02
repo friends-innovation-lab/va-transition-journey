@@ -2,8 +2,110 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Briefcase,
+  FileText,
+  Heart,
+  GraduationCap,
+  Phone,
+  Home as HomeIcon,
+  ArrowRight,
+} from 'lucide-react';
+
+const journeys = [
+  {
+    id: 'transition',
+    title: 'Leaving the Military',
+    description: 'Your personalized checklist for a successful transition to civilian life.',
+    icon: Briefcase,
+    active: true,
+    href: '/transition',
+  },
+  {
+    id: 'claims',
+    title: 'Filing a Claim',
+    description: 'Track your disability claim status and submit evidence.',
+    icon: FileText,
+    active: false,
+  },
+  {
+    id: 'healthcare',
+    title: 'Getting Care',
+    description: 'Enroll in VA health care, schedule appointments, and manage prescriptions.',
+    icon: Heart,
+    active: false,
+  },
+  {
+    id: 'education',
+    title: 'Education Benefits',
+    description: 'Use your GI Bill benefits and track your remaining entitlement.',
+    icon: GraduationCap,
+    active: false,
+  },
+  {
+    id: 'crisis',
+    title: 'Crisis Support',
+    description: 'Immediate help and resources when you need them most.',
+    icon: Phone,
+    active: false,
+  },
+  {
+    id: 'endoflife',
+    title: 'End of Life',
+    description: 'Plan burial benefits and support for your family.',
+    icon: HomeIcon,
+    active: false,
+  },
+];
+
+function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
+  const Icon = journey.icon;
+
+  if (journey.active) {
+    return (
+      <Link href={journey.href || '#'} className="block group">
+        <div className="bg-white border border-gray-200 rounded-2xl p-8 h-full transition-all duration-200 ease-out cursor-pointer hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.12)] border-l-4 border-l-[#0071bc]">
+          <div className="mb-4">
+            <div className="w-14 h-14 bg-[#0071bc]/10 rounded-xl flex items-center justify-center">
+              <Icon className="w-7 h-7 text-[#0071bc]" />
+            </div>
+          </div>
+          <h3 className="text-xl font-bold text-[#323a45] mb-2">
+            {journey.title}
+          </h3>
+          <p className="text-[#5b616b] text-sm mb-4 leading-relaxed">
+            {journey.description}
+          </p>
+          <div className="flex items-center text-[#0071bc] font-medium text-sm group-hover:gap-2 transition-all">
+            Start Journey <ArrowRight className="w-4 h-4 ml-1" />
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  return (
+    <div className="bg-white border border-gray-200 rounded-2xl p-8 h-full opacity-60 cursor-default">
+      <div className="mb-4">
+        <div className="w-14 h-14 bg-gray-100 rounded-xl flex items-center justify-center">
+          <Icon className="w-7 h-7 text-gray-400" />
+        </div>
+      </div>
+      <h3 className="text-xl font-bold text-[#323a45] mb-2">
+        {journey.title}
+      </h3>
+      <p className="text-[#5b616b] text-sm mb-4 leading-relaxed">
+        {journey.description}
+      </p>
+      <Badge variant="secondary" className="text-xs uppercase tracking-wide bg-gray-100 text-gray-500 hover:bg-gray-100">
+        Coming Soon
+      </Badge>
+    </div>
+  );
+}
 
 export default function Home() {
   const [reviewerMode, setReviewerMode] = useState(false);
@@ -39,144 +141,31 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="bg-[#003f72] py-16 px-4">
+      {/* Compact Hero Section */}
+      <section className="bg-[#003f72] py-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
-            Your transition, one step at a time
+          <h1 className="text-white text-3xl md:text-4xl font-bold mb-3">
+            Your VA journey starts here
           </h1>
-          <p className="text-white/90 text-xl mb-8 max-w-2xl mx-auto">
-            A personalized guide for separating service members — from 12 months out through your first year as a veteran.
+          <p className="text-white/90 text-lg max-w-2xl mx-auto">
+            Choose where you are in your journey. We&apos;ll guide you through every step.
           </p>
-          <div className="flex flex-col items-center gap-4">
-            <Button
-              size="lg"
-              className="bg-[#fac922] text-[#1b1b1b] hover:bg-[#e0b51e] font-bold text-lg px-8 py-6"
-            >
-              Start your transition checklist
-            </Button>
-            <a href="#sign-in" className="text-white underline hover:text-white/80">
-              Sign in to continue where you left off
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* Value Proposition Section */}
-      <section className="py-16 px-4 bg-white">
+      {/* Journey Cards Section */}
+      <section className="py-12 px-4 bg-[#f7f7f7] flex-grow">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-[#323a45]">
-            Built around your needs
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <Card className="bg-[#f1f1f1] border-none">
-              <CardHeader>
-                <div className="mb-2">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#003f72" strokeWidth="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-                </div>
-                <CardTitle className="text-[#323a45]">Personalized for you</CardTitle>
-              </CardHeader>
-              <CardContent className="text-[#5b616b]">
-                Checklist adapts to your service history, goals, and timeline. No generic advice — just what matters to your situation.
-              </CardContent>
-            </Card>
-
-            {/* Card 2 */}
-            <Card className="bg-[#f1f1f1] border-none">
-              <CardHeader>
-                <div className="mb-2">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#003f72" strokeWidth="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
-                  </svg>
-                </div>
-                <CardTitle className="text-[#323a45]">Everything in one place</CardTitle>
-              </CardHeader>
-              <CardContent className="text-[#5b616b]">
-                Benefits, health care, education, employment — no more portal hopping. One journey, one dashboard.
-              </CardContent>
-            </Card>
-
-            {/* Card 3 */}
-            <Card className="bg-[#f1f1f1] border-none">
-              <CardHeader>
-                <div className="mb-2">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#003f72" strokeWidth="2">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                  </svg>
-                </div>
-                <CardTitle className="text-[#323a45]">Proactive guidance</CardTitle>
-              </CardHeader>
-              <CardContent className="text-[#5b616b]">
-                We tell you what to do next, not just what exists. Timely reminders so you never miss a deadline.
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-16 px-4 bg-[#f1f1f1]">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-[#323a45]">
-            How it works
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8 text-center">
-            {/* Step 1 */}
-            <div>
-              <div className="bg-[#003f72] text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
-                1
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-[#323a45]">
-                Tell us about your situation
-              </h3>
-              <p className="text-[#5b616b]">
-                Your separation date, goals, and service history help us personalize your experience.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div>
-              <div className="bg-[#003f72] text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
-                2
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-[#323a45]">
-                Get your personalized checklist
-              </h3>
-              <p className="text-[#5b616b]">
-                See exactly what you need to do, when to do it, and why it matters.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div>
-              <div className="bg-[#003f72] text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
-                3
-              </div>
-              <h3 className="text-xl font-bold mb-2 text-[#323a45]">
-                Track progress and get reminders
-              </h3>
-              <p className="text-[#5b616b]">
-                Check off tasks as you go. We&apos;ll remind you of upcoming deadlines.
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center mt-12">
-            <Button size="lg" className="bg-[#003f72] hover:bg-[#112e51]">
-              Get started now
-            </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {journeys.map((journey) => (
+              <JourneyCard key={journey.id} journey={journey} />
+            ))}
           </div>
         </div>
       </section>
 
       {/* Mega Footer */}
-      <footer className="bg-[#112e51] py-12 px-4 mt-auto">
+      <footer className="bg-[#112e51] py-10 px-4">
         <div className="max-w-6xl mx-auto">
           {/* 3-Column Grid */}
           <div className="grid md:grid-cols-3 gap-8 mb-8">
@@ -283,7 +272,7 @@ export default function Home() {
         <div className="mb-6">
           <h3 className="text-[#73b3e7] font-bold mb-2">WHAT YOU&apos;RE SEEING</h3>
           <p className="text-gray-300 text-sm leading-relaxed">
-            A journey-based front door that replaces VA&apos;s org-chart navigation with Veteran life moments. Instead of &quot;Benefits, Health Care, Education...&quot; we ask &quot;What are you trying to do?&quot;
+            A journey-based front door that replaces VA&apos;s org-chart navigation with 6 Veteran life moments. Instead of &quot;Benefits, Health Care, Education...&quot; we ask &quot;What are you trying to do?&quot;
           </p>
         </div>
 
