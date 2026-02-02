@@ -1,4 +1,10 @@
+'use client';
+
+import { useState } from 'react';
+
 export default function Home() {
+  const [reviewerMode, setReviewerMode] = useState(false);
+
   return (
     <div className="vads-u-display--flex vads-u-flex-direction--column" style={{ minHeight: '100vh' }}>
       {/* VA Header */}
@@ -67,7 +73,7 @@ export default function Home() {
           </h2>
           <div className="vads-grid-row vads-u-justify-content--center">
             {/* Card 1 */}
-            <div className="vads-grid-col-12 vads-grid-col--4 vads-u-padding--2">
+            <div className="vads-grid-col-12 vads-u-padding--2" style={{ flex: '1 1 300px', maxWidth: '400px' }}>
               <div className="vads-u-background-color--base-lightest vads-u-padding--3 vads-u-height--full" style={{ borderRadius: '4px' }}>
                 <div className="vads-u-margin-bottom--1p5" style={{ fontSize: '2rem' }}>
                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#005ea2" strokeWidth="2">
@@ -85,7 +91,7 @@ export default function Home() {
             </div>
 
             {/* Card 2 */}
-            <div className="vads-grid-col-12 vads-grid-col--4 vads-u-padding--2">
+            <div className="vads-grid-col-12 vads-u-padding--2" style={{ flex: '1 1 300px', maxWidth: '400px' }}>
               <div className="vads-u-background-color--base-lightest vads-u-padding--3 vads-u-height--full" style={{ borderRadius: '4px' }}>
                 <div className="vads-u-margin-bottom--1p5" style={{ fontSize: '2rem' }}>
                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#005ea2" strokeWidth="2">
@@ -104,7 +110,7 @@ export default function Home() {
             </div>
 
             {/* Card 3 */}
-            <div className="vads-grid-col-12 vads-grid-col--4 vads-u-padding--2">
+            <div className="vads-grid-col-12 vads-u-padding--2" style={{ flex: '1 1 300px', maxWidth: '400px' }}>
               <div className="vads-u-background-color--base-lightest vads-u-padding--3 vads-u-height--full" style={{ borderRadius: '4px' }}>
                 <div className="vads-u-margin-bottom--1p5" style={{ fontSize: '2rem' }}>
                   <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#005ea2" strokeWidth="2">
@@ -131,7 +137,7 @@ export default function Home() {
           </h2>
           <div className="vads-grid-row vads-u-justify-content--center">
             {/* Step 1 */}
-            <div className="vads-grid-col-12 vads-grid-col--4 vads-u-padding--2 vads-u-text-align--center">
+            <div className="vads-grid-col-12 vads-u-padding--2 vads-u-text-align--center" style={{ flex: '1 1 300px', maxWidth: '400px' }}>
               <div
                 className="vads-u-background-color--primary vads-u-color--white vads-u-font-weight--bold vads-u-margin-bottom--2"
                 style={{
@@ -155,7 +161,7 @@ export default function Home() {
             </div>
 
             {/* Step 2 */}
-            <div className="vads-grid-col-12 vads-grid-col--4 vads-u-padding--2 vads-u-text-align--center">
+            <div className="vads-grid-col-12 vads-u-padding--2 vads-u-text-align--center" style={{ flex: '1 1 300px', maxWidth: '400px' }}>
               <div
                 className="vads-u-background-color--primary vads-u-color--white vads-u-font-weight--bold vads-u-margin-bottom--2"
                 style={{
@@ -179,7 +185,7 @@ export default function Home() {
             </div>
 
             {/* Step 3 */}
-            <div className="vads-grid-col-12 vads-grid-col--4 vads-u-padding--2 vads-u-text-align--center">
+            <div className="vads-grid-col-12 vads-u-padding--2 vads-u-text-align--center" style={{ flex: '1 1 300px', maxWidth: '400px' }}>
               <div
                 className="vads-u-background-color--primary vads-u-color--white vads-u-font-weight--bold vads-u-margin-bottom--2"
                 style={{
@@ -223,36 +229,205 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="vads-u-background-color--base-darkest vads-u-padding-y--3 vads-u-margin-top--auto">
+      {/* Mega Footer */}
+      <footer className="vads-u-background-color--primary-darker vads-u-padding-y--4 vads-u-margin-top--auto">
         <div className="vads-grid-container">
-          <div className="vads-u-text-align--center">
-            <p className="vads-u-color--base-lighter vads-u-margin--0 vads-u-font-size--base">
-              A{' '}
-              <a
-                href="https://friendsfromthecity.com"
-                className="vads-u-color--white"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Friends Innovation Lab
-              </a>
-              {' '}prototype
-            </p>
-            <p className="vads-u-color--base-light vads-u-margin-top--1 vads-u-margin-bottom--0 vads-u-font-size--sm">
-              <a href="/docs/ARCHITECTURE.md" className="vads-u-color--base-lighter vads-u-margin-right--2">
-                Architecture
-              </a>
-              <a href="/docs/JOURNEY-MAP.md" className="vads-u-color--base-lighter vads-u-margin-right--2">
-                Journey Map
-              </a>
-              <a href="/docs/OPERATING-MODEL.md" className="vads-u-color--base-lighter">
-                Operating Model
-              </a>
-            </p>
+          {/* 3-Column Grid */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '2rem',
+            marginBottom: '2rem'
+          }}>
+            {/* Health Care - VHA */}
+            <div>
+              <h3 className="vads-u-color--white vads-u-font-size--h4 vads-u-margin-top--0 vads-u-margin-bottom--2 vads-u-padding-bottom--1" style={{ borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+                Health Care (VHA)
+              </h3>
+              <ul className="vads-u-margin--0 vads-u-padding--0" style={{ listStyle: 'none' }}>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Enroll in VA health care</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Schedule appointments</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Refill prescriptions</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Message your care team</a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Benefits - VBA */}
+            <div>
+              <h3 className="vads-u-color--white vads-u-font-size--h4 vads-u-margin-top--0 vads-u-margin-bottom--2 vads-u-padding-bottom--1" style={{ borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+                Benefits (VBA)
+              </h3>
+              <ul className="vads-u-margin--0 vads-u-padding--0" style={{ listStyle: 'none' }}>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">File a disability claim</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Check claim status</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Education benefits (GI Bill)</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Home loan eligibility</a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Memorials - NCA */}
+            <div>
+              <h3 className="vads-u-color--white vads-u-font-size--h4 vads-u-margin-top--0 vads-u-margin-bottom--2 vads-u-padding-bottom--1" style={{ borderBottom: '1px solid rgba(255,255,255,0.2)' }}>
+                Memorials (NCA)
+              </h3>
+              <ul className="vads-u-margin--0 vads-u-padding--0" style={{ listStyle: 'none' }}>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Pre-need burial eligibility</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Schedule a burial</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Request military records</a>
+                </li>
+                <li className="vads-u-margin-bottom--1">
+                  <a href="#" className="vads-u-color--base-lighter vads-u-text-decoration--none">Find a cemetery</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Footer Bar */}
+          <div className="vads-u-border-top--1px vads-u-padding-top--3" style={{ borderColor: 'rgba(255,255,255,0.2)' }}>
+            <div className="vads-u-text-align--center">
+              <p className="vads-u-color--base-lighter vads-u-margin--0 vads-u-font-size--base">
+                A{' '}
+                <a
+                  href="https://friendsfromthecity.com"
+                  className="vads-u-color--white"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Friends Innovation Lab
+                </a>
+                {' '}prototype
+              </p>
+              <p className="vads-u-color--base-light vads-u-margin-top--1 vads-u-margin-bottom--0 vads-u-font-size--sm">
+                <a href="https://github.com/friends-innovation-lab/va-transition-journey" className="vads-u-color--base-lighter vads-u-margin-right--2" target="_blank" rel="noopener noreferrer">
+                  GitHub
+                </a>
+                <a href="https://github.com/friends-innovation-lab/va-transition-journey/blob/main/docs/ARCHITECTURE.md" className="vads-u-color--base-lighter vads-u-margin-right--2" target="_blank" rel="noopener noreferrer">
+                  Architecture
+                </a>
+                <a href="https://github.com/friends-innovation-lab/va-transition-journey/blob/main/docs/JOURNEY-MAP.md" className="vads-u-color--base-lighter vads-u-margin-right--2" target="_blank" rel="noopener noreferrer">
+                  Journey Map
+                </a>
+                <a href="https://github.com/friends-innovation-lab/va-transition-journey/blob/main/docs/OPERATING-MODEL.md" className="vads-u-color--base-lighter" target="_blank" rel="noopener noreferrer">
+                  Operating Model
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </footer>
+
+      {/* Reviewer Mode Toggle Button */}
+      <button
+        onClick={() => setReviewerMode(!reviewerMode)}
+        className="vads-u-font-size--sm"
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: reviewerMode ? '340px' : '20px',
+          backgroundColor: reviewerMode ? '#005ea2' : '#f0f0f0',
+          color: reviewerMode ? '#ffffff' : '#1b1b1b',
+          border: 'none',
+          borderRadius: '4px',
+          padding: '8px 12px',
+          cursor: 'pointer',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+          zIndex: 1000,
+          transition: 'right 0.3s ease'
+        }}
+      >
+        👁️ Reviewer Mode {reviewerMode ? 'ON' : 'OFF'}
+      </button>
+
+      {/* Reviewer Mode Sidebar Panel */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: reviewerMode ? 0 : '-320px',
+          width: '320px',
+          height: '100vh',
+          backgroundColor: '#1b1b1b',
+          color: '#ffffff',
+          padding: '24px',
+          boxShadow: reviewerMode ? '-4px 0 20px rgba(0,0,0,0.3)' : 'none',
+          transition: 'right 0.3s ease',
+          zIndex: 999,
+          overflowY: 'auto'
+        }}
+      >
+        <div className="vads-u-display--flex vads-u-justify-content--space-between vads-u-align-items--center vads-u-margin-bottom--3">
+          <h2 className="vads-u-font-size--h3 vads-u-margin--0" style={{ color: '#fac922' }}>
+            Reviewer Notes
+          </h2>
+          <button
+            onClick={() => setReviewerMode(false)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#ffffff',
+              fontSize: '1.5rem',
+              cursor: 'pointer',
+              padding: '4px'
+            }}
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="vads-u-margin-bottom--3">
+          <h3 className="vads-u-font-size--h4 vads-u-margin-top--0 vads-u-margin-bottom--1" style={{ color: '#73b3e7' }}>
+            WHAT YOU&apos;RE SEEING
+          </h3>
+          <p className="vads-u-font-size--sm vads-u-margin--0 vads-u-line-height--4" style={{ color: '#d4d4d4' }}>
+            A journey-based front door that replaces VA&apos;s org-chart navigation with Veteran life moments. Instead of &quot;Benefits, Health Care, Education...&quot; we ask &quot;What are you trying to do?&quot;
+          </p>
+        </div>
+
+        <div className="vads-u-margin-bottom--3">
+          <h3 className="vads-u-font-size--h4 vads-u-margin-top--0 vads-u-margin-bottom--1" style={{ color: '#73b3e7' }}>
+            WHY IT MATTERS
+          </h3>
+          <p className="vads-u-font-size--sm vads-u-margin--0 vads-u-line-height--4" style={{ color: '#d4d4d4' }}>
+            Veterans think in journeys, not departments. &quot;I&apos;m separating from service&quot; is how they frame their needs — not &quot;I need VBA form 21-526EZ.&quot; This routes them to autonomous apps, not link forests.
+          </p>
+        </div>
+
+        <div className="vads-u-margin-bottom--3">
+          <h3 className="vads-u-font-size--h4 vads-u-margin-top--0 vads-u-margin-bottom--1" style={{ color: '#73b3e7' }}>
+            THE MODEL
+          </h3>
+          <p className="vads-u-font-size--sm vads-u-margin--0 vads-u-line-height--4" style={{ color: '#d4d4d4' }}>
+            Each journey is an independent app with its own team, codebase, and deploy pipeline — sharing only auth, design system, and Veteran profile. Teams ship without waiting on 44 other teams.
+          </p>
+        </div>
+
+        <div style={{ borderTop: '1px solid #444', paddingTop: '16px', marginTop: '16px' }}>
+          <p className="vads-u-font-size--sm vads-u-margin--0" style={{ color: '#888' }}>
+            Toggle off to see it as a Veteran would.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
