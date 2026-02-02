@@ -118,7 +118,7 @@ This is not a website with 12 benefit categories. It's a simple routing layer:
 
 ## The Veteran Profile: Why Shared Data Matters
 
-The Veteran Profile isn't just a feature — it's the foundation that makes autonomous journey apps work without fragmenting the veteran's experience.
+The Veteran Profile makes autonomous journey apps possible. Without shared data, decentralization becomes fragmentation.
 
 **The Rippling Model:**
 
