@@ -116,6 +116,108 @@ This is not a website with 12 benefit categories. It's a simple routing layer:
 
 ---
 
+## Identity, Sign-In, and Recovery
+
+**Purpose:** Provide secure, veteran-friendly authentication across all journey apps.
+
+This is part of the Shared Platform Layer — authentication is a capability that all journeys use but none should build independently.
+
+### Current State
+
+VA.gov currently supports multiple sign-in options:
+- **Login.gov** — Federal shared service, phishing-resistant MFA
+- **ID.me** — Commercial identity verification
+- **My HealtheVet** — Legacy health portal credentials (being phased out)
+- **DS Logon** — DoD credential (being phased out)
+
+The consolidation toward Login.gov and ID.me is already underway.
+
+### Proposed Approach
+
+Journey apps should not implement authentication. They consume it from the Shared Platform Layer.
+
+**Sign-In Workflow:**
+
+```
+┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+│  Journey App    │ ──▶  │  Auth Service   │ ──▶  │  Login.gov /    │
+│  (Transition)   │      │  (Platform)     │      │  ID.me          │
+└─────────────────┘      └─────────────────┘      └─────────────────┘
+         │                        │                        │
+         │    "Sign in needed"    │    Redirect to IDP     │
+         │◀───────────────────────│◀───────────────────────│
+         │                        │                        │
+         │                        │    Token returned      │
+         │    Session created     │◀───────────────────────│
+         │◀───────────────────────│                        │
+         │                        │                        │
+         ▼                        ▼                        ▼
+   Veteran sees             Auth validates           Identity verified
+   personalized             and maintains            at IAL2/AAL2
+   journey content          session state
+```
+
+**Identity Proofing Levels:**
+
+| Level | What It Means | Used For |
+|-------|---------------|----------|
+| IAL1 | Self-asserted identity | Browsing, general info |
+| IAL2 | Verified identity (ID scan, SSN, etc.) | Claims, health records, payments |
+
+Journey apps declare what level they need. The platform handles verification.
+
+### Account Recovery Workflow
+
+When a veteran can't sign in:
+
+1. **Forgot password** → Handled by Login.gov/ID.me directly
+2. **Lost MFA device** → Recovery codes, backup methods at IDP
+3. **Identity re-verification** → IDP re-proofs if needed
+4. **Account locked** → Support escalation path
+
+**Key principle:** Journey apps don't handle recovery. The identity provider does.
+
+### What Journey Apps Receive
+
+After successful authentication, journey apps receive:
+
+```json
+{
+  "veteran_id": "uuid",
+  "icn": "integration-control-number",
+  "ial_level": 2,
+  "aal_level": 2,
+  "email": "veteran@example.com",
+  "first_name": "Jane",
+  "last_name": "Smith",
+  "verified": true
+}
+```
+
+Journey apps use this to fetch veteran-specific data from the API layer.
+
+### Why This Matters
+
+| Concern | How Platform Auth Solves It |
+|---------|---------------------------|
+| Security | Centralized, audited, FedRAMP-compliant |
+| Veteran experience | One login across all journeys |
+| Journey team burden | Zero auth code to write or maintain |
+| Compliance | Inherits ATO from platform |
+| Recovery | Handled by proven IDPs, not custom code |
+
+### This Prototype
+
+This prototype demonstrates the UX without implementing actual authentication:
+
+- Mock "Sign in with Login.gov" button
+- Simulated authenticated state
+- Shows what personalized experience looks like post-sign-in
+
+Production implementation would use VA's existing SSOe (Single Sign-On External) service.
+
+---
+
 ## Layer 4: Integration / API Layer
 
 **Purpose:** Abstract legacy backend systems and provide stable contracts to journey apps.
