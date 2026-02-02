@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Veteran Transition Journey
 
-## Getting Started
+A prototype demonstrating journey-based architecture for VA.gov, built in response to the Replacement Model for VA.gov RFI.
 
-First, run the development server:
+**Live Demo:** [va-journey.lab.cityfriends.tech](https://va-journey.lab.cityfriends.tech)
 
+---
+
+## What This Is
+
+This is a working prototype of the "Transitioning Out of Service" veteran journey — one of the 45+ journeys identified by the Veterans Experience Office (VEO).
+
+Instead of organizing around VA's org chart (benefits, health care, education...), this app organizes around **what the veteran is trying to do**: successfully transition from military to civilian life.
+
+## Why We Built It
+
+The Replacement Model for VA.gov RFI asks for new approaches. Our hypothesis:
+
+> VA doesn't need a new website. VA needs a new operating model.
+
+This prototype demonstrates what becomes possible when a small, autonomous team owns a complete veteran journey — with its own codebase, its own deployment pipeline, using the existing VA Design System.
+
+**What we're proving:**
+- Journey-based architecture works
+- The VA Design System (VADS) is solid — execution is the constraint
+- A focused team can ship fast without centralized review gates
+- Better veteran experiences are possible today
+
+## Tech Stack
+
+| Layer | Choice | Why |
+|-------|--------|-----|
+| Framework | Next.js 14 (Static Export) | Fast, reliable, no cold starts |
+| Design System | VA Design System (VADS) | Consistency with VA.gov, proves VADS works |
+| Hosting | Vercel | Instant deploys, edge network |
+| Data | Mock data | Demonstrates UX without backend dependencies |
+
+## Running Locally
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build static export
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Architecture](docs/ARCHITECTURE.md) — Proposed 4-layer Veteran Journey Platform
+- [Journey Map](docs/JOURNEY-MAP.md) — The veteran transition journey
+- [Operating Model](docs/OPERATING-MODEL.md) — How autonomous teams ship faster
 
-## Learn More
+## Project Structure
+```
+src/
+├── app/                  # Pages (Next.js App Router)
+├── components/           # UI components (VADS-based)
+├── lib/                  # Utilities
+└── data/                 # Mock veteran scenarios
+docs/
+├── ARCHITECTURE.md       # Proposed VA.gov architecture
+├── JOURNEY-MAP.md        # Transition journey breakdown
+└── OPERATING-MODEL.md    # Autonomous teams model
+```
 
-To learn more about Next.js, take a look at the following resources:
+## The Bigger Picture
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This prototype is one journey. The model scales:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Filing a Claim** → Own team, own repo, own deploy
+- **Getting Health Care** → Own team, own repo, own deploy
+- **Education Benefits** → Own team, own repo, own deploy
 
-## Deploy on Vercel
+Shared platform layer (auth, profile, design system) keeps it cohesive. Independent journeys let teams ship without waiting on 44 other teams.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built by [Friends Innovation Lab](https://friendsfromthecity.com) · February 2026
+
+For questions: lapedra@cityfriends.tech
