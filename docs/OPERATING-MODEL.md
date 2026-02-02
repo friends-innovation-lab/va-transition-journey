@@ -6,7 +6,7 @@ This document describes how teams work in the proposed architecture — and why 
 
 ## The Current Operating Model
 
-VA.gov uses a centralized governance model:
+VA.gov uses a centralized governance model with a monolith deploy process:
 
 **How teams ship today:**
 ```
@@ -20,10 +20,21 @@ Midpoint Review (wait)
        ↓
 Staging Review (wait)
        ↓
-Deploy with everyone else (coordinate)
+Merge to shared monolith codebase
+       ↓
+Daily deploy (all 45+ teams' changes ship together)
        ↓
 Post-launch 508 audit (wait)
 ```
+
+**The deploy reality:**
+
+VA.gov runs automated daily deploys at a configured time. All teams merge to the same `main` branch, and once per day, everything ships together. This means:
+
+- If you merge at 9am, your code waits until tomorrow's deploy
+- One team's breaking change can break everyone's features
+- Rollbacks affect all teams, not just the team with the issue
+- No team controls when their code goes live
 
 **The result:**
 - 45+ teams competing for review slots
@@ -31,6 +42,7 @@ Post-launch 508 audit (wait)
 - Centralized teams become bottlenecks
 - Teams can't respond quickly to veteran feedback
 - Innovation is slowed by coordination overhead
+- One breaking change can take down unrelated features
 
 This model was designed for control. It achieves control at the cost of speed.
 
@@ -48,16 +60,21 @@ Build feature
        ↓
 Automated checks (linting, a11y, design system compliance)
        ↓
-Deploy to their journey app
+Deploy to their journey app (independent pipeline)
        ↓
 Monitor and iterate
 ```
 
+**The deploy reality:**
+
+Each journey app has its own repository and deployment pipeline. When the Transition Journey team ships, they don't wait for the Claims team or the Health Care team. Their deploy affects only their journey.
+
 **The result:**
 - Teams own their journey end-to-end
 - No waiting on centralized reviewers
-- Ship in days, not weeks
+- Ship in hours, not days or weeks
 - Respond to veteran feedback immediately
+- Failures are isolated — one journey's bug doesn't break others
 - Governance through tooling, not gates
 
 ---
@@ -234,7 +251,15 @@ From VA.gov's own experience: 45 teams in one repo means every change requires c
 
 ---
 
-### Lesson 2: Review Gates Become Bottlenecks
+### Lesson 2: Daily Deploys Don't Equal Agility
+
+VA.gov deploys daily — but all 45+ teams deploy together. One team's bug can delay everyone. One rollback undoes everyone's work.
+
+**Application:** Independent deploy pipelines per journey. Your deploy is your deploy.
+
+---
+
+### Lesson 3: Review Gates Become Bottlenecks
 
 From multiple government IT projects: Centralized review sounds like quality control. In practice, it creates queues and delays that hurt quality by preventing iteration.
 
@@ -242,7 +267,7 @@ From multiple government IT projects: Centralized review sounds like quality con
 
 ---
 
-### Lesson 3: Design Systems Work
+### Lesson 4: Design Systems Work
 
 From GDS, USDS, and private sector: When teams share components, they ship faster AND more consistently. The investment in a design system pays for itself.
 
@@ -250,7 +275,7 @@ From GDS, USDS, and private sector: When teams share components, they ship faste
 
 ---
 
-### Lesson 4: Small Teams Beat Large Teams
+### Lesson 5: Small Teams Beat Large Teams
 
 From every USDS rescue project: The teams that fix failing projects are small (6-12 people), senior, and empowered. The teams that created the failing projects were large and heavily coordinated.
 
@@ -258,7 +283,7 @@ From every USDS rescue project: The teams that fix failing projects are small (6
 
 ---
 
-### Lesson 5: Pilots Beat Plans
+### Lesson 6: Pilots Beat Plans
 
 From Healthcare.gov, VA.gov, and beyond: Working software convinces stakeholders. Documents don't.
 
@@ -274,7 +299,7 @@ This repository demonstrates the operating model:
 |-----------|------------------------|
 | Small team | Built by 2 people in < 1 week |
 | Own codebase | This repo, not a monolith |
-| Independent deploy | Ships to Vercel without coordinating |
+| Independent deploy | Ships to Vercel on every push |
 | Uses design system | VADS components throughout |
 | Automated checks | Linting, a11y testing in CI |
 | Journey-focused | Everything serves the transition journey |
