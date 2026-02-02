@@ -116,6 +116,67 @@ This is not a website with 12 benefit categories. It's a simple routing layer:
 
 ---
 
+## The Veteran Profile: Why Shared Data Matters
+
+The Veteran Profile isn't just a feature — it's the foundation that makes autonomous journey apps work without fragmenting the veteran's experience.
+
+**The Rippling Model:**
+
+Rippling (HR/IT platform) achieves both autonomy AND integration through architecture:
+- Independent apps (Payroll, Benefits, IT, etc.) with own repos and deploy cycles
+- Unified "Employee Graph" data layer underneath
+- All apps read/write to the same employee data
+- Result: Update your address once → Payroll, Benefits, IT all see it instantly
+
+**The VA Equivalent:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    JOURNEY APPS (Independent)                           │
+│    Transitioning  │  Filing Claim  │  Getting Care  │  Education       │
+└─────────────────────────────────────────────────────────────────────────┘
+                            ↓ read/write ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    VETERAN PROFILE (Shared Data)                        │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐       │
+│  │ Identity    │ │ Contact     │ │ Benefits    │ │ Status      │       │
+│  │ - ICN       │ │ - Address   │ │ - Enrolled  │ │ - Claims    │       │
+│  │ - EDIPI     │ │ - Phone     │ │ - Elections │ │ - Appeals   │       │
+│  │ - SSN       │ │ - Email     │ │ - Dependents│ │ - Appts     │       │
+│  └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘       │
+└─────────────────────────────────────────────────────────────────────────┘
+                            ↓ sync ↓
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    LEGACY SYSTEMS (Source of Truth)                     │
+│              MVI  │  BGS  │  VistA  │  VBMS  │  VADIR                   │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**What this enables:**
+
+| Capability | How Shared Data Makes It Possible |
+|------------|-----------------------------------|
+| Update once, reflected everywhere | Address change in Transition app → Claims and Health Care see it |
+| Unified status view | Veteran sees all claims, enrollments, appointments in one place |
+| Cross-journey analytics | "How many veterans complete transition checklist AND file within 90 days?" |
+| Proactive guidance | "You just enrolled in health care → here's what to do next" |
+| Personalized journeys | App knows your service history, current benefits, pending actions |
+
+**What this requires:**
+
+- Clear data ownership (who is authoritative for each field?)
+- Sync strategy with legacy systems (real-time vs. batch)
+- Conflict resolution (what if VistA and VBMS disagree?)
+- Privacy controls (what can each journey app access?)
+
+**Why this is hard but necessary:**
+
+Without a shared Veteran Profile, "autonomous journey apps" becomes "more silos." The veteran would have to update their address in every journey app. Status would be fragmented. The experience would be worse, not better.
+
+The Veteran Profile is what makes decentralization feel unified to the veteran.
+
+---
+
 ## Identity, Sign-In, and Recovery
 
 **Purpose:** Provide secure, veteran-friendly authentication across all journey apps.
