@@ -133,9 +133,9 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* 1. CRISIS BANNER - Left aligned */}
+      {/* 1. CRISIS BANNER - Positioned at 3/4 */}
       <div className="bg-[#c4262e] text-white h-10 px-6 lg:px-12 flex items-center">
-        <span className="text-sm">
+        <span className="text-sm ml-auto mr-[25%]">
           <span className="font-semibold">Veterans Crisis Line:</span>{' '}
           <a href="tel:988" className="underline text-white">Call 988 (Press 1)</a>
           {' | '}
