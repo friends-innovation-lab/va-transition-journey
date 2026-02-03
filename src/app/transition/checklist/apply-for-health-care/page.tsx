@@ -23,11 +23,17 @@ const prefilledData = [
 export default function ApplyForHealthCarePage() {
   const { simulateErrors } = useErrorSimulation();
   const [showToast, setShowToast] = useState(false);
+  const [showStartToast, setShowStartToast] = useState(false);
   const [prefilledExpanded, setPrefilledExpanded] = useState(false);
 
   const handleMarkComplete = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 4000);
+  };
+
+  const handleStartApplication = () => {
+    setShowStartToast(true);
+    setTimeout(() => setShowStartToast(false), 4000);
   };
 
   const readyCount = requirements.filter(r => r.checked).length;
@@ -49,6 +55,15 @@ export default function ApplyForHealthCarePage() {
               <Check className="w-3 h-3 text-white" />
             </div>
             <span className="text-sm leading-relaxed">Progress saved to your Veteran Profile.</span>
+          </div>
+        </div>
+      )}
+
+      {/* Start Application Toast */}
+      {showStartToast && (
+        <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
+          <div className="bg-[#0071bc] text-white px-5 py-4 rounded-lg shadow-lg flex items-start gap-3 max-w-sm">
+            <span className="text-sm leading-relaxed">In production, this would open the VA health care application with your data pre-filled.</span>
           </div>
         </div>
       )}
@@ -159,7 +174,10 @@ export default function ApplyForHealthCarePage() {
 
         {/* Primary CTA */}
         <div className="text-center mb-4">
-          <Button className="bg-[#0071bc] hover:bg-[#005a9e] text-white font-semibold px-10 py-4 rounded-lg h-auto text-base shadow-md hover:shadow-lg transition-shadow w-full sm:w-auto sm:min-w-[280px]">
+          <Button
+            onClick={handleStartApplication}
+            className="bg-[#0071bc] hover:bg-[#005a9e] text-white font-semibold px-10 py-4 rounded-lg h-auto text-base shadow-md hover:shadow-lg transition-shadow w-full sm:w-auto sm:min-w-[280px]"
+          >
             Start application →
           </Button>
         </div>

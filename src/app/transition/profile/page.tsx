@@ -42,8 +42,8 @@ const maritalStatusOptions = [
 export default function ProfilePage() {
   const router = useRouter();
   const { simulateErrors } = useErrorSimulation();
-  const [maritalStatus, setMaritalStatus] = useState('');
-  const [dependents, setDependents] = useState('');
+  const [maritalStatus, setMaritalStatus] = useState('married');
+  const [dependents, setDependents] = useState('2');
   const [showToast, setShowToast] = useState(false);
   const [errors, setErrors] = useState<{ maritalStatus?: boolean; dependents?: boolean }>({});
   const [shake, setShake] = useState(false);
@@ -230,19 +230,17 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Right Column - Explanation Card */}
+          {/* Right Column - Explanation Text */}
           <div className="flex flex-col justify-center">
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-bold text-[#111827] mb-4">
-                One profile. Every journey.
-              </h2>
-              <p className="text-base text-[#4b5563] mb-4 leading-relaxed">
-                Update your information once, and every VA service sees it. No more filling out the same forms over and over.
-              </p>
-              <p className="text-base text-[#4b5563] leading-relaxed">
-                Your service record came from DoD. Your contact info stays current across health care, claims, and education benefits.
-              </p>
-            </div>
+            <h2 className="text-xl font-bold text-[#111827] mb-4">
+              One profile. Every journey.
+            </h2>
+            <p className="text-base text-[#4b5563] mb-4 leading-relaxed">
+              Update your information once, and every VA service sees it. No more filling out the same forms over and over.
+            </p>
+            <p className="text-base text-[#4b5563] leading-relaxed">
+              Your service record came from DoD. Your contact info stays current across health care, claims, and education benefits.
+            </p>
           </div>
         </div>
 
