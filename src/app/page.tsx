@@ -66,10 +66,10 @@ function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
 
   const cardContent = (
     <div
-      className={`flex items-start gap-5 py-8 px-4 border-t border-[#e5e5e5] transition-all duration-200 ${
+      className={`flex items-start gap-5 py-8 px-4 border-t border-[#e5e5e5] transition-all duration-200 hover:bg-[#fafaf8] cursor-pointer ${
         journey.active
-          ? 'opacity-100 hover:bg-[#fafaf8] cursor-pointer'
-          : 'opacity-60 cursor-default'
+          ? 'opacity-100'
+          : 'opacity-60 hover:opacity-80'
       }`}
     >
       {/* Icon - 64px flat blue */}
