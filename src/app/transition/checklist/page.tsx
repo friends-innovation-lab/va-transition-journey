@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Check, Circle, ChevronRight } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
 
 interface OnboardingData {
   separationDate: string;
@@ -103,19 +102,7 @@ export default function ChecklistPage() {
   const progress = Math.round((completedCount / filteredChecklist.length) * 100);
 
   return (
-    <div className="min-h-screen bg-[#f5f5f0]">
-      {/* Header */}
-      <header className="bg-white border-b border-[#e5e5e5] py-4 px-6">
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-[#003f72]">
-            VA.gov
-          </Link>
-          <span className="text-sm text-[#6b7280]">
-            Transition Checklist
-          </span>
-        </div>
-      </header>
-
+    <div className="flex-grow">
       {/* Success Message */}
       {showSuccess && (
         <div className="bg-[#dcfce7] border-b border-[#bbf7d0] py-4 px-6">

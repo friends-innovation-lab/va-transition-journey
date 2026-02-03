@@ -77,7 +77,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="bg-white flex-grow">
       {/* Progress Bar */}
       <div className="h-1 bg-gray-100">
         <div
@@ -87,7 +87,7 @@ export default function OnboardingPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-[500px] mx-auto px-6 py-16">
+      <div className="max-w-[500px] mx-auto px-6 py-12">
         {/* Step Indicator */}
         <p className="text-sm text-[#6b7280] mb-8">
           Step {step} of 3
