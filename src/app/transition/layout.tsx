@@ -1,11 +1,22 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { ChevronDown } from 'lucide-react';
 
 export default function TransitionLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  // Show signed-in state for pages after sign-in
+  const isSignedIn = pathname !== '/transition/sign-in';
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f5f0]">
       {/* Header */}
@@ -32,18 +43,58 @@ export default function TransitionLayout({
             <span className="text-[#374151]">Transition Journey</span>
           </div>
 
-          {/* Right - Sign In */}
-          <Link
-            href="/transition/sign-in"
-            className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2 rounded-md transition-colors"
-          >
-            Sign in
-          </Link>
+          {/* Right - Sign In or User Menu */}
+          {isSignedIn ? (
+            <div className="relative">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center gap-2 text-sm font-medium text-[#374151] hover:text-[#111827]"
+              >
+                <div className="w-8 h-8 bg-[#003f72] rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-semibold">MJ</span>
+                </div>
+                <span className="hidden sm:inline">Marcus J.</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+
+              {showDropdown && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowDropdown(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-[#e5e5e5] py-2 z-50">
+                    <Link
+                      href="/transition/profile"
+                      className="block px-4 py-2 text-sm text-[#374151] hover:bg-[#f5f5f0]"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      My Profile
+                    </Link>
+                    <Link
+                      href="/"
+                      className="block px-4 py-2 text-sm text-[#374151] hover:bg-[#f5f5f0]"
+                      onClick={() => setShowDropdown(false)}
+                    >
+                      Sign out
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <Link
+              href="/transition/sign-in"
+              className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2 rounded-md transition-colors"
+            >
+              Sign in
+            </Link>
+          )}
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow">
+      <main className="flex-grow flex flex-col">
         {children}
       </main>
 

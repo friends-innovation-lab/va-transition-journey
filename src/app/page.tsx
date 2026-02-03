@@ -22,7 +22,7 @@ const journeys = [
     description: 'Navigate your transition with a personalized timeline covering benefits enrollment, career preparation, healthcare setup, and everything you need before and after separation.',
     icon: Briefcase,
     active: true,
-    href: '/transition/onboarding',
+    href: '/transition/sign-in',
   },
   {
     id: 'claims',

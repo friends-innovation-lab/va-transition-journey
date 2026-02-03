@@ -19,21 +19,42 @@ export default function SignInPage() {
           {/* Sign-in Buttons */}
           <div className="space-y-4">
             {/* Login.gov */}
-            <button className="w-full flex items-center justify-center gap-3 px-6 py-4 border-2 border-[#0071bc] rounded-lg hover:bg-[#eff6ff] transition-colors">
-              <div className="w-8 h-8 bg-[#0071bc] rounded flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-bold text-sm">L</span>
+            <Link
+              href="/transition/profile"
+              className="w-full h-14 flex items-center justify-center gap-3 px-6 bg-[#112e51] rounded-lg hover:bg-[#1a4480] transition-colors"
+            >
+              <div className="w-6 h-6 bg-[#e21c3d] rounded flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
               </div>
-              <span className="text-[#0071bc] font-semibold">Sign in with Login.gov</span>
-            </button>
+              <span className="text-white font-semibold">Sign in with Login.gov</span>
+            </Link>
 
             {/* ID.me */}
-            <button className="w-full flex items-center justify-center gap-3 px-6 py-4 border-2 border-[#2d8633] rounded-lg hover:bg-[#f0fdf4] transition-colors">
-              <div className="w-8 h-8 bg-[#2d8633] rounded flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-bold text-sm">ID</span>
+            <Link
+              href="/transition/profile"
+              className="w-full h-14 flex items-center justify-center gap-3 px-6 bg-[#2d8633] rounded-lg hover:bg-[#236b29] transition-colors"
+            >
+              <div className="w-6 h-6 bg-white rounded flex items-center justify-center flex-shrink-0">
+                <span className="text-[#2d8633] font-bold text-xs">ID</span>
               </div>
-              <span className="text-[#2d8633] font-semibold">Sign in with ID.me</span>
-            </button>
+              <span className="text-white font-semibold">Sign in with ID.me</span>
+            </Link>
           </div>
+
+          {/* Create Account */}
+          <p className="text-center text-[#374151] mt-6 text-sm">
+            Don&apos;t have an account?{' '}
+            <a
+              href="https://login.gov"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#0071bc] font-medium hover:underline"
+            >
+              Create one with Login.gov
+            </a>
+          </p>
 
           {/* Divider */}
           <div className="relative my-8">
@@ -45,36 +66,16 @@ export default function SignInPage() {
             </div>
           </div>
 
-          {/* Create Account */}
-          <p className="text-center text-[#374151]">
-            Don&apos;t have an account?{' '}
-            <a
-              href="https://login.gov"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#0071bc] font-medium hover:underline"
+          {/* Skip Link */}
+          <div className="text-center">
+            <Link
+              href="/transition/profile"
+              className="text-sm text-[#6b7280] hover:text-[#374151] hover:underline inline-flex items-center gap-1"
             >
-              Create one with Login.gov
-            </a>
-          </p>
-        </div>
-
-        {/* Skip Link */}
-        <div className="mt-6 text-center">
-          <Link
-            href="/transition/onboarding"
-            className="text-sm text-[#6b7280] hover:text-[#374151] inline-flex items-center gap-1"
-          >
-            Skip for now
-            <span>→</span>
-          </Link>
-        </div>
-
-        {/* Info Box */}
-        <div className="mt-8 bg-[#eff6ff] border border-[#bfdbfe] rounded-lg p-4">
-          <p className="text-sm text-[#1e40af]">
-            <strong>Why sign in?</strong> Your progress will be saved, and we can pre-fill forms with your information from VA records.
-          </p>
+              Skip for now
+              <span>→</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
