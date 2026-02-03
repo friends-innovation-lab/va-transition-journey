@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, AlertTriangle, ChevronRight, X } from 'lucide-react';
-import Link from 'next/link';
+import { Check, AlertTriangle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useErrorSimulation } from '@/context/ErrorSimulationContext';
+import { JourneyBanner } from '@/components/JourneyBanner';
 
 const profileData = {
   name: 'Marcus Johnson',
@@ -45,7 +45,6 @@ export default function ProfilePage() {
   const [maritalStatus, setMaritalStatus] = useState('');
   const [dependents, setDependents] = useState('');
   const [showToast, setShowToast] = useState(false);
-  const [statusToast, setStatusToast] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ maritalStatus?: boolean; dependents?: boolean }>({});
   const [shake, setShake] = useState(false);
 
@@ -70,7 +69,7 @@ export default function ProfilePage() {
     setErrors({});
     setShowToast(true);
     setTimeout(() => {
-      router.push('/transition/onboarding');
+      router.push('/transition/checklist');
     }, 1500);
   };
 
@@ -88,13 +87,8 @@ export default function ProfilePage() {
     }
   };
 
-  const handleStatusClick = (message: string) => {
-    setStatusToast(message);
-    setTimeout(() => setStatusToast(null), 3000);
-  };
-
   return (
-    <div className="flex-grow py-12 px-6">
+    <div className="flex-grow py-8">
       {/* Toast Notification */}
       {showToast && (
         <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
@@ -107,29 +101,21 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Status Toast - Dark bottom-center style */}
-      {statusToast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom duration-300">
-          <div className="bg-[#1f2937] text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-3">
-            <span className="text-sm">{statusToast}</span>
-            <button
-              onClick={() => setStatusToast(null)}
-              className="text-[#9ca3af] hover:text-white transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Journey Banner */}
+      <JourneyBanner
+        journeyName="Leaving the Military"
+        journeyIcon="🎖️"
+        subtitle="Confirm your information"
+      />
 
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-[32px] font-bold text-[#111827] mb-2">
-            Welcome back, Marcus.
+            Welcome, Marcus.
           </h1>
           <p className="text-lg text-[#6b7280]">
-            Here&apos;s what we already know.
+            We pulled your service record from DoD. Please confirm your information.
           </p>
         </div>
 
@@ -244,62 +230,18 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Right Column - Status Card */}
-          <div className="flex flex-col justify-start">
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-              <div className="px-6 py-4 border-b border-[#e5e5e5]">
-                <h2 className="text-lg font-semibold text-[#111827]">
-                  Your Status Across VA
-                </h2>
-              </div>
-
-              {/* Transition - Links to checklist */}
-              <Link
-                href="/transition/checklist"
-                className="flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] hover:bg-[#f5f5f0] transition-colors group"
-              >
-                <div>
-                  <div className="text-sm font-medium text-[#111827]">Transition</div>
-                  <div className="text-sm text-[#6b7280]">In progress — 2 of 5 tasks</div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
-              </Link>
-
-              {/* Disability Claim - Toast */}
-              <button
-                onClick={() => handleStatusClick('Claim tracking coming soon')}
-                className="w-full flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] hover:bg-[#f5f5f0] transition-colors group text-left"
-              >
-                <div>
-                  <div className="text-sm font-medium text-[#111827]">Disability Claim</div>
-                  <div className="text-sm text-[#6b7280]">1 claim in progress</div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
-              </button>
-
-              {/* Health Care - Toast */}
-              <button
-                onClick={() => handleStatusClick('Health care portal coming soon')}
-                className="w-full flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] hover:bg-[#f5f5f0] transition-colors group text-left"
-              >
-                <div>
-                  <div className="text-sm font-medium text-[#111827]">Health Care</div>
-                  <div className="text-sm text-[#6b7280]">Enrolled</div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
-              </button>
-
-              {/* Education - Toast */}
-              <button
-                onClick={() => handleStatusClick('Education benefits coming soon')}
-                className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#f5f5f0] transition-colors group text-left"
-              >
-                <div>
-                  <div className="text-sm font-medium text-[#111827]">Education</div>
-                  <div className="text-sm text-[#6b7280]">Not started</div>
-                </div>
-                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
-              </button>
+          {/* Right Column - Explanation Card */}
+          <div className="flex flex-col justify-center">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h2 className="text-xl font-bold text-[#111827] mb-4">
+                One profile. Every journey.
+              </h2>
+              <p className="text-base text-[#4b5563] mb-4 leading-relaxed">
+                Update your information once, and every VA service sees it. No more filling out the same forms over and over.
+              </p>
+              <p className="text-base text-[#4b5563] leading-relaxed">
+                Your service record came from DoD. Your contact info stays current across health care, claims, and education benefits.
+              </p>
             </div>
           </div>
         </div>
@@ -308,9 +250,9 @@ export default function ProfilePage() {
         <div className="flex justify-end">
           <Button
             onClick={handleContinue}
-            className="bg-[#003f72] hover:bg-[#002d52] text-white font-semibold px-8 py-3 rounded-lg h-auto"
+            className="bg-[#22c55e] hover:bg-[#16a34a] text-white font-semibold px-8 py-3 rounded-lg h-auto"
           >
-            Continue
+            Continue to Your Checklist →
           </Button>
         </div>
       </div>

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Check, ChevronRight, X, ArrowRight, AlertTriangle } from 'lucide-react';
+import { Check, ChevronRight, X, ArrowRight, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { useErrorSimulation } from '@/context/ErrorSimulationContext';
+import { JourneyBanner } from '@/components/JourneyBanner';
 
 interface OnboardingData {
   separationDate: string;
@@ -144,6 +145,13 @@ export default function ChecklistPage() {
 
   return (
     <div className="flex-grow">
+      {/* Journey Banner */}
+      <JourneyBanner
+        journeyName="Leaving the Military"
+        journeyIcon="🎖️"
+        subtitle="Your personalized transition checklist"
+      />
+
       {/* Success Message */}
       {showSuccess && (
         <div className="bg-[#dcfce7] border-b border-[#bbf7d0] py-4 px-6">
@@ -272,6 +280,17 @@ export default function ChecklistPage() {
               );
             })}
           </div>
+        </div>
+
+        {/* Back to All Journeys */}
+        <div className="mt-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#374151] transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to All Journeys</span>
+          </Link>
         </div>
 
         {/* Help Section */}

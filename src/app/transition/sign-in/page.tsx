@@ -10,10 +10,10 @@ export default function SignInPage() {
         <div className="bg-white rounded-xl shadow-sm p-8">
           {/* Header */}
           <h1 className="text-2xl font-bold text-[#111827] mb-2">
-            Sign in to start your journey
+            Sign in to continue
           </h1>
           <p className="text-[#6b7280] mb-8">
-            We&apos;ll save your progress and personalize your checklist.
+            We&apos;ll pull your service record from DoD so you don&apos;t have to enter it manually.
           </p>
 
           {/* Sign-in Buttons */}

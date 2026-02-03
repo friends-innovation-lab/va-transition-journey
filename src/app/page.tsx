@@ -14,6 +14,7 @@ import {
   Menu,
   Search,
   ChevronDown,
+  X,
 } from 'lucide-react';
 
 interface Journey {
@@ -87,27 +88,26 @@ const journeys: Journey[] = [
   },
 ];
 
-function JourneyCard({ journey, isSignedIn }: { journey: Journey; isSignedIn: boolean }) {
+function JourneyCard({
+  journey,
+  isSignedIn,
+  onMockJourneyClick
+}: {
+  journey: Journey;
+  isSignedIn: boolean;
+  onMockJourneyClick?: () => void;
+}) {
   const Icon = journey.icon;
+  const isMockJourney = !journey.active && journey.badge;
 
   const cardContent = (
     <div
-      className={`group flex items-start gap-5 py-8 px-4 border-t border-[#e5e5e5] transition-all duration-200 hover:bg-[#fafaf8] cursor-pointer ${
-        journey.active
-          ? 'opacity-100'
-          : 'opacity-60 hover:opacity-80'
-      }`}
+      className="group flex items-start gap-5 py-8 px-4 border-t border-[#e5e5e5] transition-all duration-200 hover:bg-[#fafaf8] cursor-pointer"
     >
       {/* Icon - 64px flat blue */}
-      <div
-        className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center ${
-          journey.active
-            ? 'bg-[#dbeafe]'
-            : 'bg-[#f3f4f6]'
-        }`}
-      >
+      <div className="flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center bg-[#dbeafe]">
         <Icon
-          className={`w-7 h-7 ${journey.active ? 'text-[#0071bc]' : 'text-[#9ca3af]'}`}
+          className="w-7 h-7 text-[#0071bc]"
           strokeWidth={1.5}
         />
       </div>
@@ -119,9 +119,7 @@ function JourneyCard({ journey, isSignedIn }: { journey: Journey; isSignedIn: bo
           <h3 className="text-lg font-semibold text-[#111827]">
             {journey.title}
           </h3>
-          {journey.active && (
-            <span className="text-[#9ca3af] transition-transform duration-150 ease-out group-hover:translate-x-1.5">→</span>
-          )}
+          <span className="text-[#9ca3af] transition-transform duration-150 ease-out group-hover:translate-x-1.5">→</span>
         </div>
 
         {/* Description */}
@@ -147,24 +145,29 @@ function JourneyCard({ journey, isSignedIn }: { journey: Journey; isSignedIn: bo
         )}
 
         {/* Action */}
-        {journey.active ? (
-          <span className="text-[15px] font-medium text-[#111827] border-b-2 border-[#f59e0b] hover:border-[#d97706] pb-0.5 inline-block">
-            {isSignedIn ? 'Continue Journey' : 'Start Journey'}
-          </span>
-        ) : (
-          <span className="text-[11px] font-medium uppercase tracking-wider text-[#9ca3af]">
-            Coming Soon
-          </span>
-        )}
+        <span className="text-[15px] font-medium text-[#111827] border-b-2 border-[#f59e0b] hover:border-[#d97706] pb-0.5 inline-block">
+          {journey.active && isSignedIn ? 'Continue' : 'Start Journey'}
+        </span>
       </div>
     </div>
   );
 
+  // Active journey - links to checklist when signed in, sign-in when not
   if (journey.active) {
+    const href = isSignedIn ? '/transition/checklist' : (journey.href || '#');
     return (
-      <Link href={journey.href || '#'} className="block">
+      <Link href={href} className="block">
         {cardContent}
       </Link>
+    );
+  }
+
+  // Mock journey with badge - show toast when clicked (only when signed in)
+  if (isMockJourney && isSignedIn && onMockJourneyClick) {
+    return (
+      <button onClick={onMockJourneyClick} className="block w-full text-left">
+        {cardContent}
+      </button>
     );
   }
 
@@ -175,6 +178,12 @@ export default function Home() {
   const [reviewerMode, setReviewerMode] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  const handleMockJourneyClick = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -363,7 +372,12 @@ export default function Home() {
           {/* Cards - 3 columns on desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
             {journeys.map((journey) => (
-              <JourneyCard key={journey.id} journey={journey} isSignedIn={isSignedIn} />
+              <JourneyCard
+                key={journey.id}
+                journey={journey}
+                isSignedIn={isSignedIn}
+                onMockJourneyClick={handleMockJourneyClick}
+              />
             ))}
           </div>
         </div>
@@ -445,6 +459,18 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Toast for mock journeys */}
+      {showToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+          <div className="bg-[#1f2937] text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <span>This journey is simulated for the demo.</span>
+            <button onClick={() => setShowToast(false)} className="text-white/70 hover:text-white">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 6. REVIEWER MODE Toggle - Pill shape */}
       <button

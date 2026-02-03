@@ -12,26 +12,27 @@ import { ErrorSimulationProvider, useErrorSimulation } from '@/context/ErrorSimu
 const breadcrumbConfig: Record<string, { label: string; href?: string }[]> = {
   '/transition/sign-in': [
     { label: 'Home', href: '/' },
+    { label: 'Leaving the Military' },
     { label: 'Sign in' },
   ],
   '/transition/profile': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/transition' },
+    { label: 'Leaving the Military', href: '/transition/checklist' },
     { label: 'Your Profile' },
   ],
   '/transition/onboarding': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/transition' },
+    { label: 'Leaving the Military', href: '/transition/checklist' },
     { label: 'Priorities' },
   ],
   '/transition/checklist': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/transition' },
+    { label: 'Leaving the Military' },
     { label: 'Your Checklist' },
   ],
   '/transition/checklist/apply-for-health-care': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/transition' },
+    { label: 'Leaving the Military', href: '/transition/checklist' },
     { label: 'Your Checklist', href: '/transition/checklist' },
     { label: 'Apply for VA Health Care' },
   ],
