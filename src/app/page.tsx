@@ -133,8 +133,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* 1. CRISIS BANNER - NOT sticky, left-aligned */}
-      <div className="bg-[#c4262e] text-white h-10 px-6 flex items-center">
+      {/* 1. CRISIS BANNER - NOT sticky, right-aligned */}
+      <div className="bg-[#c4262e] text-white h-10 px-6 flex items-center justify-end">
         <span className="text-sm">
           <span className="font-semibold">Veterans Crisis Line:</span>{' '}
           <a href="tel:988" className="underline">Call 988 (Press 1)</a>
@@ -319,9 +319,9 @@ export default function Home() {
                 U.S. Department of Veterans Affairs
               </h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Contact us</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Find a VA location</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">1-800-827-1000</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Contact us</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Find a VA location</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">1-800-827-1000</a></li>
               </ul>
             </div>
 
@@ -329,10 +329,10 @@ export default function Home() {
             <div>
               <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Health Care</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Apply for health care</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">My HealtheVet</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Prescriptions</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Mental health</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Apply for health care</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">My HealtheVet</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Prescriptions</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Mental health</a></li>
               </ul>
             </div>
 
@@ -340,10 +340,10 @@ export default function Home() {
             <div>
               <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Benefits</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Disability</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Education (GI Bill)</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Careers & employment</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Housing assistance</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Disability</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Education (GI Bill)</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Careers & employment</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Housing assistance</a></li>
               </ul>
             </div>
 
@@ -351,10 +351,10 @@ export default function Home() {
             <div>
               <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Resources</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">VSO finder</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Life insurance</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Burials & memorials</a></li>
-                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Family & caregivers</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">VSO finder</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Life insurance</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Burials & memorials</a></li>
+                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Family & caregivers</a></li>
               </ul>
             </div>
           </div>
@@ -362,10 +362,10 @@ export default function Home() {
           {/* Bottom Bar */}
           <div className="border-t border-[#333] pt-6 mt-12">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-[13px] text-gray-500">
+              <p className="text-[13px] text-white/70">
                 © 2026 U.S. Department of Veterans Affairs
               </p>
-              <div className="flex flex-wrap justify-center gap-4 text-[13px] text-gray-500">
+              <div className="flex flex-wrap justify-center gap-4 text-[13px] text-white/70">
                 <a href="#" className="hover:text-white transition-colors">Accessibility</a>
                 <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
                 <a href="#" className="hover:text-white transition-colors">FOIA</a>
