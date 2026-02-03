@@ -13,9 +13,23 @@ import {
   Home as HomeIcon,
   Menu,
   Search,
+  ChevronDown,
 } from 'lucide-react';
 
-const journeys = [
+interface Journey {
+  id: string;
+  title: string;
+  description: string;
+  icon: typeof Briefcase;
+  active: boolean;
+  href?: string;
+  badge?: {
+    text: string;
+    type: 'amber' | 'emerald';
+  };
+}
+
+const journeys: Journey[] = [
   {
     id: 'transition',
     title: 'Leaving the Military',
@@ -30,6 +44,10 @@ const journeys = [
     description: 'File disability claims, upload supporting evidence, track your status in real-time, and understand each step of the decision process.',
     icon: FileText,
     active: false,
+    badge: {
+      text: '1 claim in progress',
+      type: 'amber',
+    },
   },
   {
     id: 'healthcare',
@@ -37,6 +55,10 @@ const journeys = [
     description: 'Enroll in VA health care, find and schedule appointments, manage prescriptions, message your care team, and access your health records.',
     icon: Heart,
     active: false,
+    badge: {
+      text: 'Enrolled ✓',
+      type: 'emerald',
+    },
   },
   {
     id: 'education',
@@ -61,7 +83,7 @@ const journeys = [
   },
 ];
 
-function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
+function JourneyCard({ journey, isSignedIn }: { journey: Journey; isSignedIn: boolean }) {
   const Icon = journey.icon;
 
   const cardContent = (
@@ -88,13 +110,25 @@ function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
 
       {/* Content */}
       <div className="flex-grow min-w-0">
-        {/* Title row with arrow */}
-        <div className="flex items-center gap-2 mb-2">
+        {/* Title row with arrow and badge */}
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
           <h3 className="text-lg font-semibold text-[#111827]">
             {journey.title}
           </h3>
           {journey.active && (
             <span className="text-[#9ca3af] transition-transform duration-150 ease-out group-hover:translate-x-1.5">→</span>
+          )}
+          {/* Cross-journey badge - only show when signed in */}
+          {isSignedIn && journey.badge && (
+            <span
+              className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                journey.badge.type === 'amber'
+                  ? 'bg-[#fef3c7] text-[#b45309]'
+                  : 'bg-[#d1fae5] text-[#047857]'
+              }`}
+            >
+              {journey.badge.text}
+            </span>
           )}
         </div>
 
@@ -130,6 +164,8 @@ function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
 
 export default function Home() {
   const [reviewerMode, setReviewerMode] = useState(false);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
@@ -179,9 +215,54 @@ export default function Home() {
             <a href="#" className="hidden md:block text-[15px] text-[#4b5563] hover:text-[#111827]">
               Contact
             </a>
-            <Button className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2 rounded-md">
-              Sign in
-            </Button>
+            {isSignedIn ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="flex items-center gap-2 text-sm font-medium text-[#374151] hover:text-[#111827]"
+                >
+                  <div className="w-8 h-8 bg-[#003f72] rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm font-semibold">MJ</span>
+                  </div>
+                  <span className="hidden sm:inline">Marcus J.</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+
+                {showDropdown && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowDropdown(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-[#e5e5e5] py-2 z-50">
+                      <Link
+                        href="/transition/profile"
+                        className="block px-4 py-2 text-sm text-[#374151] hover:bg-[#f5f5f0]"
+                        onClick={() => setShowDropdown(false)}
+                      >
+                        My Profile
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setIsSignedIn(false);
+                          setShowDropdown(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-[#374151] hover:bg-[#f5f5f0]"
+                      >
+                        Sign out
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <Button
+                onClick={() => setIsSignedIn(true)}
+                className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2 rounded-md"
+              >
+                Sign in
+              </Button>
+            )}
             <button className="lg:hidden p-2 text-[#4b5563] hover:text-[#111827]">
               <Menu className="w-6 h-6" />
             </button>
@@ -261,7 +342,7 @@ export default function Home() {
           {/* Cards - 3 columns on desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
             {journeys.map((journey) => (
-              <JourneyCard key={journey.id} journey={journey} />
+              <JourneyCard key={journey.id} journey={journey} isSignedIn={isSignedIn} />
             ))}
           </div>
         </div>

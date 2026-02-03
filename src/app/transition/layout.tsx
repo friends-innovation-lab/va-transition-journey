@@ -41,7 +41,7 @@ function ErrorSimulationToggle() {
   const { simulateErrors, setSimulateErrors } = useErrorSimulation();
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 bg-white/90 backdrop-blur-sm rounded-lg shadow-md border border-[#e5e5e5] px-3 py-2">
+    <div className="fixed top-20 right-4 z-40 bg-white/95 backdrop-blur-sm rounded-lg shadow-md border border-[#e5e5e5] px-3 py-2">
       <label className="flex items-center gap-2 cursor-pointer">
         <span className="text-xs text-[#6b7280]">Simulate errors</span>
         <button
