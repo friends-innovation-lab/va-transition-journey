@@ -7,6 +7,36 @@ import { usePathname } from 'next/navigation';
 import { ChevronDown, Search, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+// Breadcrumb configuration for each route
+const breadcrumbConfig: Record<string, { label: string; href?: string }[]> = {
+  '/transition/sign-in': [
+    { label: 'Home', href: '/' },
+    { label: 'Leaving the Military', href: '/' },
+    { label: 'Sign in' },
+  ],
+  '/transition/profile': [
+    { label: 'Home', href: '/' },
+    { label: 'Leaving the Military', href: '/' },
+    { label: 'Your Profile' },
+  ],
+  '/transition/onboarding': [
+    { label: 'Home', href: '/' },
+    { label: 'Leaving the Military', href: '/' },
+    { label: 'Priorities' },
+  ],
+  '/transition/checklist': [
+    { label: 'Home', href: '/' },
+    { label: 'Leaving the Military', href: '/' },
+    { label: 'Your Checklist' },
+  ],
+  '/transition/checklist/apply-for-health-care': [
+    { label: 'Home', href: '/' },
+    { label: 'Leaving the Military', href: '/' },
+    { label: 'Your Checklist', href: '/transition/checklist' },
+    { label: 'Apply for Health Care' },
+  ],
+};
+
 export default function TransitionLayout({
   children,
 }: {
@@ -117,6 +147,36 @@ export default function TransitionLayout({
           </div>
         </div>
       </header>
+
+      {/* Breadcrumbs */}
+      {breadcrumbConfig[pathname] && (
+        <div className="bg-[#f5f5f0] border-b border-[#e5e5e5]">
+          <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-3">
+            <nav className="flex items-center gap-2 text-sm">
+              {breadcrumbConfig[pathname].map((crumb, index) => {
+                const isLast = index === breadcrumbConfig[pathname].length - 1;
+                return (
+                  <span key={index} className="flex items-center gap-2">
+                    {index > 0 && <span className="text-[#9ca3af]">/</span>}
+                    {crumb.href && !isLast ? (
+                      <Link
+                        href={crumb.href}
+                        className="text-[#6b7280] hover:text-[#0071bc] hover:underline"
+                      >
+                        {crumb.label}
+                      </Link>
+                    ) : (
+                      <span className={isLast ? 'text-[#374151]' : 'text-[#6b7280]'}>
+                        {crumb.label}
+                      </span>
+                    )}
+                  </span>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-grow flex flex-col">

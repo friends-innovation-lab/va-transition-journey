@@ -22,6 +22,14 @@ const benefits = [
   'You control your data',
 ];
 
+const dependentOptions = [
+  { value: 'none', label: 'None' },
+  { value: '1', label: '1' },
+  { value: '2', label: '2' },
+  { value: '3', label: '3' },
+  { value: '4+', label: '4+' },
+];
+
 const maritalStatusOptions = [
   { value: 'single', label: 'Single' },
   { value: 'married', label: 'Married' },
@@ -31,8 +39,7 @@ const maritalStatusOptions = [
 
 export default function ProfilePage() {
   const [maritalStatus, setMaritalStatus] = useState('');
-  const [hasDependents, setHasDependents] = useState<boolean | null>(null);
-  const [dependentCount, setDependentCount] = useState('');
+  const [dependents, setDependents] = useState('');
 
   return (
     <div className="flex-grow py-12 px-6">
@@ -60,16 +67,60 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            <div className="space-y-4">
+            {/* Read-only fields from VA */}
+            <div className="space-y-3">
               <ProfileField label="Name" value={profileData.name} />
               <ProfileField label="Branch" value={profileData.branch} />
               <ProfileField label="Rank" value={profileData.rank} />
               <ProfileField label="Service dates" value={profileData.serviceDates} />
               <ProfileField label="Separation date" value={profileData.separationDate} />
               <ProfileField label="Status" value={profileData.status} highlight />
-              <div className="border-t border-[#e5e5e5] pt-4 mt-4">
-                <ProfileField label="Email" value={profileData.email} />
-                <ProfileField label="Phone" value={profileData.phone} />
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-[#e5e5e5] my-5" />
+
+            {/* Contact info */}
+            <div className="space-y-3">
+              <ProfileField label="Email" value={profileData.email} />
+              <ProfileField label="Phone" value={profileData.phone} />
+            </div>
+
+            {/* Divider */}
+            <div className="border-t border-[#e5e5e5] my-5" />
+
+            {/* Editable fields */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-[#6b7280]">Marital status</label>
+                <select
+                  value={maritalStatus}
+                  onChange={(e) => setMaritalStatus(e.target.value)}
+                  className="w-40 px-3 py-1.5 text-sm rounded-md border border-[#d1d5db] text-[#374151] bg-white focus:border-[#0071bc] focus:outline-none"
+                >
+                  <option value="">Select...</option>
+                  {maritalStatusOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <label className="text-sm text-[#6b7280]">Dependents</label>
+                <select
+                  value={dependents}
+                  onChange={(e) => setDependents(e.target.value)}
+                  className="w-40 px-3 py-1.5 text-sm rounded-md border border-[#d1d5db] text-[#374151] bg-white focus:border-[#0071bc] focus:outline-none"
+                >
+                  <option value="">Select...</option>
+                  {dependentOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
@@ -97,86 +148,6 @@ export default function ProfilePage() {
                   <span className="text-[#374151]">{benefit}</span>
                 </div>
               ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Complete Your Profile Section */}
-        <div className="bg-[#fafafa] border border-[#e5e5e5] rounded-xl p-6 mb-10">
-          <h3 className="text-xl font-bold text-[#111827] mb-2">
-            Help us complete your profile
-          </h3>
-          <p className="text-[#6b7280] mb-6">
-            This information helps us personalize your benefits and coverage.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Marital Status */}
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-2">
-                Marital status
-              </label>
-              <select
-                value={maritalStatus}
-                onChange={(e) => setMaritalStatus(e.target.value)}
-                className="w-full px-4 py-3 rounded-lg border border-[#d1d5db] text-[#374151] bg-white focus:border-[#0071bc] focus:outline-none focus:ring-2 focus:ring-[#0071bc]/20 transition-colors"
-              >
-                <option value="">Select...</option>
-                {maritalStatusOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Dependents */}
-            <div>
-              <label className="block text-sm font-medium text-[#374151] mb-2">
-                Do you have dependents?
-              </label>
-              <div className="flex gap-4 mb-3">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="dependents"
-                    checked={hasDependents === true}
-                    onChange={() => setHasDependents(true)}
-                    className="w-4 h-4 text-[#0071bc] border-[#d1d5db] focus:ring-[#0071bc]"
-                  />
-                  <span className="text-[#374151]">Yes</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="dependents"
-                    checked={hasDependents === false}
-                    onChange={() => {
-                      setHasDependents(false);
-                      setDependentCount('');
-                    }}
-                    className="w-4 h-4 text-[#0071bc] border-[#d1d5db] focus:ring-[#0071bc]"
-                  />
-                  <span className="text-[#374151]">No</span>
-                </label>
-              </div>
-
-              {hasDependents === true && (
-                <div className="mt-3">
-                  <label className="block text-sm font-medium text-[#374151] mb-2">
-                    How many?
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="20"
-                    value={dependentCount}
-                    onChange={(e) => setDependentCount(e.target.value)}
-                    placeholder="Enter number"
-                    className="w-full px-4 py-3 rounded-lg border border-[#d1d5db] text-[#374151] bg-white focus:border-[#0071bc] focus:outline-none focus:ring-2 focus:ring-[#0071bc]/20 transition-colors"
-                  />
-                </div>
-              )}
             </div>
           </div>
         </div>

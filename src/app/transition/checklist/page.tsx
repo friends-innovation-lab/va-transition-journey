@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Check, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import { Check, ChevronRight, X } from 'lucide-react';
 
 interface OnboardingData {
   separationDate: string;
@@ -17,6 +18,7 @@ const checklistItems = [
     description: 'Required transition counseling and employment assistance',
     category: 'career',
     completed: false,
+    href: null,
   },
   {
     id: 'medical-records',
@@ -24,6 +26,7 @@ const checklistItems = [
     description: 'Get copies from your military treatment facility',
     category: 'healthcare',
     completed: false,
+    href: null,
   },
   {
     id: 'va-claim',
@@ -31,6 +34,7 @@ const checklistItems = [
     description: 'Start the Benefits Delivery at Discharge (BDD) program',
     category: 'disability',
     completed: false,
+    href: null,
   },
   {
     id: 'va-healthcare',
@@ -38,6 +42,7 @@ const checklistItems = [
     description: 'Enroll online at VA.gov or call 1-877-222-8387',
     category: 'healthcare',
     completed: false,
+    href: '/transition/checklist/apply-for-health-care',
   },
   {
     id: 'gi-bill',
@@ -45,6 +50,7 @@ const checklistItems = [
     description: 'Choose your education benefit and apply online',
     category: 'education',
     completed: false,
+    href: null,
   },
   {
     id: 'resume',
@@ -52,6 +58,7 @@ const checklistItems = [
     description: 'Translate your military experience for employers',
     category: 'career',
     completed: false,
+    href: null,
   },
   {
     id: 'housing',
@@ -59,6 +66,7 @@ const checklistItems = [
     description: 'Get your Certificate of Eligibility (COE)',
     category: 'housing',
     completed: false,
+    href: null,
   },
   {
     id: 'mental-health',
@@ -66,6 +74,7 @@ const checklistItems = [
     description: 'Free, confidential support available to all Veterans',
     category: 'mentalhealth',
     completed: false,
+    href: null,
   },
 ];
 
@@ -73,6 +82,7 @@ export default function ChecklistPage() {
   const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(null);
   const [checklist, setChecklist] = useState(checklistItems);
   const [showSuccess, setShowSuccess] = useState(true);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const data = localStorage.getItem('va-onboarding');
@@ -84,10 +94,18 @@ export default function ChecklistPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const toggleItem = (id: string) => {
+  const toggleItem = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     setChecklist(checklist.map(item =>
       item.id === id ? { ...item, completed: !item.completed } : item
     ));
+  };
+
+  const handleItemClick = (item: typeof checklistItems[0]) => {
+    if (!item.href) {
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }
   };
 
   // Filter checklist based on priorities
@@ -113,6 +131,18 @@ export default function ChecklistPage() {
             <p className="text-[#166534] font-medium">
               Got it. Here&apos;s your personalized checklist.
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+          <div className="bg-[#1f2937] text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <span>This task detail is coming soon.</span>
+            <button onClick={() => setShowToast(false)} className="text-white/70 hover:text-white">
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
       )}
@@ -144,36 +174,46 @@ export default function ChecklistPage() {
             </h2>
           </div>
           <div className="divide-y divide-[#e5e5e5]">
-            {filteredChecklist.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => toggleItem(item.id)}
-                className="w-full text-left px-6 py-5 flex items-start gap-4 hover:bg-[#fafafa] transition-colors"
-              >
-                <div className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-colors ${
-                  item.completed
-                    ? 'bg-[#22c55e] border-[#22c55e]'
-                    : 'border-[#d1d5db]'
-                }`}>
-                  {item.completed && <Check className="w-4 h-4 text-white" />}
-                </div>
-                <div className="flex-grow">
-                  <h3 className={`text-base font-medium transition-colors ${
-                    item.completed ? 'text-[#9ca3af] line-through' : 'text-[#111827]'
-                  }`}>
-                    {item.title}
-                  </h3>
-                  <p className={`text-sm mt-1 ${
-                    item.completed ? 'text-[#d1d5db]' : 'text-[#6b7280]'
-                  }`}>
-                    {item.description}
-                  </p>
-                </div>
-                <ChevronRight className={`w-5 h-5 flex-shrink-0 mt-1 ${
-                  item.completed ? 'text-[#d1d5db]' : 'text-[#9ca3af]'
-                }`} />
-              </button>
-            ))}
+            {filteredChecklist.map((item) => {
+              const ItemWrapper = item.href ? Link : 'div';
+              const wrapperProps = item.href
+                ? { href: item.href }
+                : { onClick: () => handleItemClick(item) };
+
+              return (
+                <ItemWrapper
+                  key={item.id}
+                  {...(wrapperProps as any)}
+                  className="w-full text-left px-6 py-5 flex items-start gap-4 hover:bg-[#fafafa] transition-colors cursor-pointer block"
+                >
+                  <button
+                    onClick={(e) => toggleItem(item.id, e)}
+                    className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-colors ${
+                      item.completed
+                        ? 'bg-[#22c55e] border-[#22c55e]'
+                        : 'border-[#d1d5db] hover:border-[#9ca3af]'
+                    }`}
+                  >
+                    {item.completed && <Check className="w-4 h-4 text-white" />}
+                  </button>
+                  <div className="flex-grow">
+                    <h3 className={`text-base font-medium transition-colors ${
+                      item.completed ? 'text-[#9ca3af] line-through' : 'text-[#111827]'
+                    }`}>
+                      {item.title}
+                    </h3>
+                    <p className={`text-sm mt-1 ${
+                      item.completed ? 'text-[#d1d5db]' : 'text-[#6b7280]'
+                    }`}>
+                      {item.description}
+                    </p>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 flex-shrink-0 mt-1 ${
+                    item.completed ? 'text-[#d1d5db]' : 'text-[#9ca3af]'
+                  }`} />
+                </ItemWrapper>
+              );
+            })}
           </div>
         </div>
 
