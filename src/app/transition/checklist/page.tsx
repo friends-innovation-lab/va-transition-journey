@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Check, ChevronRight, X } from 'lucide-react';
+import { Check, ChevronRight, X, ArrowRight } from 'lucide-react';
 
 interface OnboardingData {
   separationDate: string;
@@ -11,30 +11,35 @@ interface OnboardingData {
   priorities: string[];
 }
 
-const checklistItems = [
+interface ChecklistItem {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  completed: boolean;
+  href: string | null;
+  time: string;
+  isCurrent?: boolean;
+}
+
+const checklistItems: ChecklistItem[] = [
   {
-    id: 'tap',
-    title: 'Register for TAP (Transition Assistance Program)',
-    description: 'Required transition counseling and employment assistance',
+    id: 'va-register',
+    title: 'Register on VA.gov',
+    description: 'Create your account to access VA services online',
     category: 'career',
-    completed: false,
+    completed: true,
     href: null,
+    time: '~5 min',
   },
   {
-    id: 'medical-records',
-    title: 'Request your complete medical records',
-    description: 'Get copies from your military treatment facility',
-    category: 'healthcare',
-    completed: false,
+    id: 'dd214',
+    title: 'Request your DD-214',
+    description: 'Official discharge document needed for benefits',
+    category: 'career',
+    completed: true,
     href: null,
-  },
-  {
-    id: 'va-claim',
-    title: 'File your VA disability claim',
-    description: 'Start the Benefits Delivery at Discharge (BDD) program',
-    category: 'disability',
-    completed: false,
-    href: null,
+    time: '~10 min',
   },
   {
     id: 'va-healthcare',
@@ -43,14 +48,35 @@ const checklistItems = [
     category: 'healthcare',
     completed: false,
     href: '/transition/checklist/apply-for-health-care',
+    time: '~20 min',
+    isCurrent: true,
+  },
+  {
+    id: 'va-claim',
+    title: 'File your VA disability claim',
+    description: 'Start the Benefits Delivery at Discharge (BDD) program',
+    category: 'disability',
+    completed: false,
+    href: null,
+    time: '~45 min',
   },
   {
     id: 'gi-bill',
-    title: 'Apply for GI Bill benefits',
+    title: 'Review GI Bill eligibility',
     description: 'Choose your education benefit and apply online',
     category: 'education',
     completed: false,
     href: null,
+    time: '~10 min',
+  },
+  {
+    id: 'tap',
+    title: 'Register for TAP (Transition Assistance Program)',
+    description: 'Required transition counseling and employment assistance',
+    category: 'career',
+    completed: false,
+    href: null,
+    time: '~15 min',
   },
   {
     id: 'resume',
@@ -59,6 +85,7 @@ const checklistItems = [
     category: 'career',
     completed: false,
     href: null,
+    time: '~30 min',
   },
   {
     id: 'housing',
@@ -67,14 +94,7 @@ const checklistItems = [
     category: 'housing',
     completed: false,
     href: null,
-  },
-  {
-    id: 'mental-health',
-    title: 'Schedule a mental health screening',
-    description: 'Free, confidential support available to all Veterans',
-    category: 'mentalhealth',
-    completed: false,
-    href: null,
+    time: '~15 min',
   },
 ];
 
@@ -96,12 +116,13 @@ export default function ChecklistPage() {
 
   const toggleItem = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setChecklist(checklist.map(item =>
       item.id === id ? { ...item, completed: !item.completed } : item
     ));
   };
 
-  const handleItemClick = (item: typeof checklistItems[0]) => {
+  const handleItemClick = (item: ChecklistItem) => {
     if (!item.href) {
       setShowToast(true);
       setTimeout(() => setShowToast(false), 3000);
@@ -180,37 +201,61 @@ export default function ChecklistPage() {
                 ? { href: item.href }
                 : { onClick: () => handleItemClick(item) };
 
+              // Determine styling based on item state
+              const isCompleted = item.completed;
+              const isCurrent = item.isCurrent && !item.completed;
+
               return (
                 <ItemWrapper
                   key={item.id}
                   {...(wrapperProps as any)}
-                  className="w-full text-left px-6 py-5 flex items-start gap-4 hover:bg-[#fafafa] transition-colors cursor-pointer block"
+                  className={`w-full text-left px-6 py-5 flex items-start gap-4 transition-colors cursor-pointer block ${
+                    isCurrent
+                      ? 'bg-[#eff6ff] border-l-4 border-l-[#0071bc]'
+                      : 'hover:bg-[#fafafa]'
+                  }`}
                 >
                   <button
                     onClick={(e) => toggleItem(item.id, e)}
                     className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-colors ${
-                      item.completed
+                      isCompleted
                         ? 'bg-[#22c55e] border-[#22c55e]'
                         : 'border-[#d1d5db] hover:border-[#9ca3af]'
                     }`}
                   >
-                    {item.completed && <Check className="w-4 h-4 text-white" />}
+                    {isCompleted && <Check className="w-4 h-4 text-white" />}
                   </button>
                   <div className="flex-grow">
-                    <h3 className={`text-base font-medium transition-colors ${
-                      item.completed ? 'text-[#9ca3af] line-through' : 'text-[#111827]'
-                    }`}>
-                      {item.title}
-                    </h3>
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <h3 className={`text-base font-medium transition-colors ${
+                        isCompleted ? 'text-[#9ca3af] line-through' : 'text-[#111827]'
+                      }`}>
+                        {item.title}
+                      </h3>
+                      <span className={`text-xs px-2 py-0.5 rounded ${
+                        isCompleted
+                          ? 'bg-[#dcfce7] text-[#166534]'
+                          : 'bg-[#f3f4f6] text-[#6b7280]'
+                      }`}>
+                        {isCompleted ? '✓ Complete' : item.time}
+                      </span>
+                    </div>
                     <p className={`text-sm mt-1 ${
-                      item.completed ? 'text-[#d1d5db]' : 'text-[#6b7280]'
+                      isCompleted ? 'text-[#d1d5db]' : 'text-[#6b7280]'
                     }`}>
                       {item.description}
                     </p>
                   </div>
-                  <ChevronRight className={`w-5 h-5 flex-shrink-0 mt-1 ${
-                    item.completed ? 'text-[#d1d5db]' : 'text-[#9ca3af]'
-                  }`} />
+                  {isCurrent ? (
+                    <div className="flex items-center gap-1 text-[#0071bc] font-medium text-sm flex-shrink-0 mt-1">
+                      <span>Start</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  ) : (
+                    <ChevronRight className={`w-5 h-5 flex-shrink-0 mt-1 ${
+                      isCompleted ? 'text-[#d1d5db]' : 'text-[#9ca3af]'
+                    }`} />
+                  )}
                 </ItemWrapper>
               );
             })}

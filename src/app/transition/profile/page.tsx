@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -38,11 +38,32 @@ const maritalStatusOptions = [
 ];
 
 export default function ProfilePage() {
+  const router = useRouter();
   const [maritalStatus, setMaritalStatus] = useState('');
   const [dependents, setDependents] = useState('');
+  const [showToast, setShowToast] = useState(false);
+
+  const handleContinue = () => {
+    setShowToast(true);
+    setTimeout(() => {
+      router.push('/transition/onboarding');
+    }, 1500);
+  };
 
   return (
     <div className="flex-grow py-12 px-6">
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
+          <div className="bg-white text-[#166534] px-5 py-4 rounded-lg shadow-lg border border-[#bbf7d0] flex items-start gap-3 max-w-sm">
+            <div className="w-5 h-5 bg-[#22c55e] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Check className="w-3 h-3 text-white" />
+            </div>
+            <span className="text-sm leading-relaxed">Saved to your Veteran Profile. This data is now available across all VA journeys.</span>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-10">
@@ -55,7 +76,7 @@ export default function ProfilePage() {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-10">
           {/* Left Column - Profile Card */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-6">
@@ -154,11 +175,12 @@ export default function ProfilePage() {
 
         {/* Continue Button */}
         <div className="flex justify-end">
-          <Link href="/transition/onboarding">
-            <Button className="bg-[#003f72] hover:bg-[#002d52] text-white font-semibold px-8 py-3 rounded-lg h-auto">
-              Continue
-            </Button>
-          </Link>
+          <Button
+            onClick={handleContinue}
+            className="bg-[#003f72] hover:bg-[#002d52] text-white font-semibold px-8 py-3 rounded-lg h-auto"
+          >
+            Continue
+          </Button>
         </div>
       </div>
     </div>

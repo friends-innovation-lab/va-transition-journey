@@ -17,6 +17,7 @@ const priorityOptions = [
 export default function OnboardingPage() {
   const router = useRouter();
   const [priorities, setPriorities] = useState<string[]>([]);
+  const [showToast, setShowToast] = useState(false);
 
   const handlePriorityToggle = (value: string) => {
     if (priorities.includes(value)) {
@@ -31,13 +32,28 @@ export default function OnboardingPage() {
     localStorage.setItem('va-onboarding', JSON.stringify({
       priorities,
     }));
-    router.push('/transition/checklist');
+    setShowToast(true);
+    setTimeout(() => {
+      router.push('/transition/checklist');
+    }, 1500);
   };
 
   const canContinue = priorities.length > 0;
 
   return (
-    <div className="bg-white flex-grow">
+    <div className="bg-white flex-grow relative">
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
+          <div className="bg-white text-[#166534] px-5 py-4 rounded-lg shadow-lg border border-[#bbf7d0] flex items-start gap-3 max-w-sm">
+            <div className="w-5 h-5 bg-[#22c55e] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Check className="w-3 h-3 text-white" />
+            </div>
+            <span className="text-sm leading-relaxed">Preferences saved. Your checklist has been personalized.</span>
+          </div>
+        </div>
+      )}
+
       {/* Content */}
       <div className="max-w-[600px] mx-auto px-6 py-12">
         {/* Header */}

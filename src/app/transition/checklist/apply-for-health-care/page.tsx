@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Clock, Check, Square, Phone, MapPin, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -27,10 +28,29 @@ const prefilledData = [
 ];
 
 export default function ApplyForHealthCarePage() {
+  const [showToast, setShowToast] = useState(false);
+
+  const handleMarkComplete = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 4000);
+  };
+
   return (
     <div className="flex-grow py-8 px-6">
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
+          <div className="bg-white text-[#166534] px-5 py-4 rounded-lg shadow-lg border border-[#bbf7d0] flex items-start gap-3 max-w-sm">
+            <div className="w-5 h-5 bg-[#22c55e] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Check className="w-3 h-3 text-white" />
+            </div>
+            <span className="text-sm leading-relaxed">Progress saved to your Veteran Profile.</span>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           {/* Main Content */}
           <div className="lg:col-span-2">
             {/* Back Link */}
@@ -43,31 +63,29 @@ export default function ApplyForHealthCarePage() {
             </Link>
 
             {/* Header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-[28px] font-bold text-[#111827]">
-                  Apply for VA Health Care
-                </h1>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#f3f4f6] rounded-full text-sm text-[#6b7280]">
-                  <Clock className="w-4 h-4" />
-                  ~20 minutes
-                </span>
-              </div>
+            <div className="mb-10">
+              <h1 className="text-[32px] font-bold text-[#111827] mb-3">
+                Apply for VA Health Care
+              </h1>
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#dbeafe] rounded-full text-sm text-[#0071bc] font-medium">
+                <Clock className="w-4 h-4" />
+                ~20 minutes
+              </span>
             </div>
 
             {/* Why This Matters */}
-            <section className="mb-8">
-              <h2 className="text-lg font-semibold text-[#111827] mb-3">
+            <section className="mb-10">
+              <h2 className="text-xl font-semibold text-[#111827] mb-4">
                 Why this matters
               </h2>
-              <p className="text-[#4b5563] leading-relaxed">
+              <p className="text-[#4b5563] leading-relaxed text-base">
                 As a transitioning service member, you have 5 years of enhanced eligibility for VA health care. Enrolling now ensures no gap in coverage when you separate.
               </p>
             </section>
 
             {/* What You'll Need */}
-            <section className="mb-8">
-              <h2 className="text-lg font-semibold text-[#111827] mb-3">
+            <section className="mb-10">
+              <h2 className="text-xl font-semibold text-[#111827] mb-4">
                 What you&apos;ll need
               </h2>
               <div className="space-y-3">
@@ -92,36 +110,37 @@ export default function ApplyForHealthCarePage() {
             </section>
 
             {/* Steps */}
-            <section className="mb-8">
-              <h2 className="text-lg font-semibold text-[#111827] mb-3">
+            <section className="mb-10">
+              <h2 className="text-xl font-semibold text-[#111827] mb-4">
                 Steps
               </h2>
-              <ol className="space-y-3">
+              <ol className="space-y-4">
                 {steps.map((step, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="w-6 h-6 bg-[#dbeafe] text-[#0071bc] rounded-full flex items-center justify-center flex-shrink-0 text-sm font-medium">
+                  <li key={index} className="flex items-start gap-4">
+                    <span className="w-8 h-8 bg-[#0071bc] text-white rounded-full flex items-center justify-center flex-shrink-0 text-sm font-semibold">
                       {index + 1}
                     </span>
-                    <span className="text-[#374151] pt-0.5">{step}</span>
+                    <span className="text-[#374151] pt-1 text-base">{step}</span>
                   </li>
                 ))}
               </ol>
             </section>
 
             {/* Pre-filled Preview */}
-            <section className="mb-10">
-              <h2 className="text-lg font-semibold text-[#111827] mb-3">
+            <section className="mb-12">
+              <h2 className="text-xl font-semibold text-[#111827] mb-4">
                 Pre-filled preview
               </h2>
-              <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-lg p-4">
-                <p className="text-sm text-[#166534] mb-3 font-medium">
+              <div className="bg-[#f0fdf4] border-2 border-[#bbf7d0] rounded-xl p-5">
+                <p className="text-sm text-[#166534] mb-4 font-medium flex items-center gap-2">
+                  <Check className="w-4 h-4" />
                   Based on your profile, we&apos;ve pre-filled:
                 </p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   {prefilledData.map((item) => (
                     <div key={item.label}>
-                      <span className="text-xs text-[#6b7280] block">{item.label}</span>
-                      <span className="text-sm text-[#111827]">{item.value}</span>
+                      <span className="text-xs text-[#6b7280] block mb-1">{item.label}</span>
+                      <span className="text-sm text-[#111827] font-medium">{item.value}</span>
                     </div>
                   ))}
                 </div>
@@ -129,13 +148,14 @@ export default function ApplyForHealthCarePage() {
             </section>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-[#0071bc] hover:bg-[#005a9e] text-white font-semibold px-8 py-3 rounded-lg h-auto text-base">
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <Button className="bg-[#0071bc] hover:bg-[#005a9e] text-white font-semibold px-10 py-4 rounded-lg h-auto text-base shadow-md hover:shadow-lg transition-shadow">
                 Start application →
               </Button>
               <Button
                 variant="outline"
-                className="border-[#d1d5db] text-[#374151] hover:bg-[#f9fafb] font-medium px-6 py-3 rounded-lg h-auto"
+                onClick={handleMarkComplete}
+                className="border-[#d1d5db] text-[#374151] hover:bg-[#f9fafb] font-medium px-6 py-4 rounded-lg h-auto"
               >
                 Mark as complete
               </Button>
