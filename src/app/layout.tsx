@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: "Veteran Transition Journey | VA.gov",
@@ -13,11 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="stylesheet" href="/vads/stylesheets/core.css" />
-        <link rel="stylesheet" href="/vads/stylesheets/utilities.css" />
-      </head>
-      <body className="vads-u-font-family--sans">
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

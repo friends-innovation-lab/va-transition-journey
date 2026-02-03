@@ -1,11 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
 import {
   Briefcase,
   FileText,
@@ -13,7 +10,8 @@ import {
   GraduationCap,
   Phone,
   Home as HomeIcon,
-  ChevronRight,
+  Menu,
+  ArrowRight,
 } from 'lucide-react';
 
 const journeys = [
@@ -66,51 +64,56 @@ function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
   const Icon = journey.icon;
 
   const cardContent = (
-    <Card
-      className={`flex items-center gap-4 p-6 border-t border-gray-200 border-x-0 border-b-0 rounded-none bg-white transition-all duration-200 ${
+    <div
+      className={`flex items-start gap-6 py-8 border-t border-[#e5e5e5] transition-all duration-200 ${
         journey.active
-          ? 'opacity-100 hover:bg-gray-50 cursor-pointer'
-          : 'opacity-60 cursor-default'
+          ? 'opacity-100 hover:bg-[#fafaf8] cursor-pointer'
+          : 'opacity-50 cursor-default'
       }`}
     >
-      {/* Icon */}
+      {/* Icon - 80px with gradient for active */}
       <div
-        className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center ${
-          journey.active ? 'bg-[#dbeafe]' : 'bg-[#f3f4f6]'
+        className={`flex-shrink-0 w-20 h-20 rounded-2xl flex items-center justify-center ${
+          journey.active
+            ? 'bg-gradient-to-br from-[#667eea] to-[#764ba2]'
+            : 'bg-[#e5e5e5]'
         }`}
       >
         <Icon
-          className={`w-8 h-8 ${journey.active ? 'text-[#0071bc]' : 'text-[#9ca3af]'}`}
+          className={`w-9 h-9 ${journey.active ? 'text-white' : 'text-[#9ca3af]'}`}
           strokeWidth={1.5}
         />
       </div>
 
       {/* Content */}
       <div className="flex-grow min-w-0">
-        <h3 className="text-lg font-bold text-[#1b1b1b] mb-1">
-          {journey.title}
-        </h3>
-        <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+        {/* Title row with arrow */}
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-xl font-semibold text-gray-900">
+            {journey.title}
+          </h3>
+          {journey.active && (
+            <span className="text-gray-400 text-xl">→</span>
+          )}
+        </div>
+
+        {/* Description */}
+        <p className="text-[15px] text-gray-500 leading-relaxed mb-4 max-w-lg">
           {journey.description}
         </p>
+
+        {/* Action */}
         {journey.active ? (
-          <span className="text-[#0071bc] text-sm font-medium hover:underline inline-flex items-center gap-1">
-            Start Journey <ChevronRight className="w-4 h-4" />
+          <span className="text-[15px] font-medium text-gray-900 border-b-2 border-[#f59e0b] hover:border-[#d97706] pb-0.5 inline-block">
+            Start Journey
           </span>
         ) : (
-          <Badge className="text-xs uppercase tracking-wider bg-gray-100 text-gray-500 hover:bg-gray-100 font-medium px-2 py-1">
+          <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
             Coming Soon
-          </Badge>
+          </span>
         )}
       </div>
-
-      {/* Arrow for active */}
-      {journey.active && (
-        <div className="flex-shrink-0">
-          <ChevronRight className="w-5 h-5 text-gray-400" />
-        </div>
-      )}
-    </Card>
+    </div>
   );
 
   if (journey.active) {
@@ -129,127 +132,146 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* 1. CRISIS BANNER - Sticky */}
-      <div className="bg-[#c4262e] text-white text-center py-2 px-6 text-sm sticky top-0 z-50">
-        <span className="font-bold">Veterans Crisis Line:</span>{' '}
-        <a href="tel:988" className="underline font-semibold">Call 988 then Press 1</a>
-        {' | '}
-        <a href="sms:838255" className="underline">Text 838255</a>
+      {/* 1. CRISIS BANNER - NOT sticky, left-aligned */}
+      <div className="bg-[#c4262e] text-white h-10 px-6 flex items-center">
+        <span className="text-sm">
+          <span className="font-semibold">Veterans Crisis Line:</span>{' '}
+          <a href="tel:988" className="underline">Call 988 (Press 1)</a>
+          {' | '}
+          <a href="sms:838255" className="underline">Text 838255</a>
+        </span>
       </div>
 
-      {/* 2. HEADER */}
-      <header className="bg-white border-b border-gray-200 py-4 px-6">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      {/* 2. HEADER - STICKY */}
+      <header className="sticky top-0 z-50 bg-white border-b border-[#e5e5e5] h-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 h-full flex items-center justify-between">
           {/* Left - Logo */}
-          <Link href="/">
-            <Image
-              src="/va-header-logo.png"
-              alt="VA.gov"
-              width={164}
-              height={40}
-              className="h-10 w-auto"
-              priority
-            />
+          <Link href="/" className="text-2xl font-bold text-[#003f72]">
+            VA.gov
           </Link>
 
-          {/* Right - Sign In */}
-          <Button className="bg-[#0071bc] hover:bg-[#205493] text-white rounded-md px-6">
-            Sign in
-          </Button>
+          {/* Center - Main Nav (hidden on mobile) */}
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
+              Health Care
+            </a>
+            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
+              Benefits
+            </a>
+            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
+              About VA
+            </a>
+            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
+              Find a Location
+            </a>
+          </nav>
+
+          {/* Right - Sign In & Mobile Menu */}
+          <div className="flex items-center gap-4">
+            <Button className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2.5 rounded-md">
+              Sign in
+            </Button>
+            <button className="md:hidden p-2 text-gray-600 hover:text-gray-900">
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* 3. HERO SECTION - BIG and Inviting */}
+      {/* 3. HERO SECTION */}
       <section
-        className="relative min-h-[70vh] flex items-center"
+        className="relative min-h-[500px] flex items-center py-20 px-6"
         style={{
           background: 'linear-gradient(135deg, #003f72 0%, #0071bc 100%)',
         }}
       >
-        <div className="max-w-7xl mx-auto w-full px-8 lg:px-20 py-16">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
-            {/* Left side - 55% */}
-            <div className="lg:w-[55%] text-center lg:text-left">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column - 55% */}
+            <div className="lg:col-span-1">
+              <h1 className="text-5xl lg:text-[48px] font-bold text-white tracking-tight leading-tight mb-6">
                 Your VA journey<br />starts here
               </h1>
-              <p className="text-xl text-white/90 max-w-lg mx-auto lg:mx-0 mb-8">
+              <p className="text-lg text-white/80 max-w-lg mb-8">
                 Choose where you are in your journey. We&apos;ll guide you through every step.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   size="lg"
-                  className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-8 py-6 text-lg"
+                  className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-6 py-3 rounded-md text-base"
                 >
                   Get Started
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white/50 text-white hover:bg-white/10 px-8 py-6 text-lg"
+                  className="border-white text-white hover:bg-white/10 px-6 py-3 rounded-md text-base"
                 >
                   Sign in to personalize
                 </Button>
               </div>
             </div>
 
-            {/* Right side - 45% */}
-            <div className="lg:w-[45%] w-full max-w-md lg:max-w-none">
-              <div className="relative">
-                {/* Device mockup placeholder */}
-                <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
-                  {/* Tablet frame */}
-                  <div className="bg-[#1a1a1a] rounded-2xl p-4 shadow-2xl">
-                    {/* Screen */}
-                    <div className="bg-white rounded-xl overflow-hidden">
-                      {/* App UI mockup */}
-                      <div className="p-4">
-                        {/* Header bar */}
-                        <div className="flex items-center gap-2 mb-4">
-                          <div className="w-8 h-8 bg-[#003f72] rounded"></div>
-                          <div className="h-3 w-20 bg-gray-200 rounded"></div>
-                        </div>
-                        {/* Progress indicator */}
-                        <div className="mb-4">
-                          <div className="h-2 bg-gray-100 rounded-full">
-                            <div className="h-2 w-3/4 bg-[#0071bc] rounded-full"></div>
-                          </div>
-                          <p className="text-xs text-gray-500 mt-1">75% complete</p>
-                        </div>
-                        {/* Checklist items */}
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                              </svg>
-                            </div>
-                            <div className="h-3 w-32 bg-gray-200 rounded"></div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                              </svg>
-                            </div>
-                            <div className="h-3 w-28 bg-gray-200 rounded"></div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-5 h-5 border-2 border-[#0071bc] rounded-full"></div>
-                            <div className="h-3 w-36 bg-gray-200 rounded"></div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
-                            <div className="h-3 w-24 bg-gray-100 rounded"></div>
-                          </div>
-                        </div>
+            {/* Right Column - Device Mockup */}
+            <div className="lg:col-span-1 hidden lg:flex justify-end">
+              <div className="relative w-full max-w-md">
+                {/* Card/Checklist mockup */}
+                <div className="bg-white rounded-2xl shadow-2xl p-6 transform rotate-2">
+                  {/* Header */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#003f72] rounded-lg flex items-center justify-center">
+                      <Briefcase className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">Transition Checklist</p>
+                      <p className="text-xs text-gray-500">12 months before separation</p>
+                    </div>
+                  </div>
+
+                  {/* Progress */}
+                  <div className="mb-6">
+                    <div className="flex justify-between text-sm mb-2">
+                      <span className="text-gray-600">Progress</span>
+                      <span className="font-semibold text-[#0071bc]">75%</span>
+                    </div>
+                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-full w-3/4 bg-gradient-to-r from-[#0071bc] to-[#003f72] rounded-full"></div>
+                    </div>
+                  </div>
+
+                  {/* Checklist items */}
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
                       </div>
+                      <span className="text-sm text-gray-700">Register for TAP class</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-gray-700">Request medical records</span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border-2 border-[#0071bc]">
+                      <div className="w-5 h-5 border-2 border-[#0071bc] rounded-full flex-shrink-0"></div>
+                      <span className="text-sm text-gray-900 font-medium">Schedule VA benefits briefing</span>
+                      <ArrowRight className="w-4 h-4 text-[#0071bc] ml-auto" />
+                    </div>
+                    <div className="flex items-center gap-3 p-3 rounded-lg">
+                      <div className="w-5 h-5 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
+                      <span className="text-sm text-gray-400">Create eBenefits account</span>
                     </div>
                   </div>
                 </div>
+
                 {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#fac922]/20 rounded-full blur-2xl"></div>
-                <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#fac922]/30 rounded-full blur-2xl"></div>
+                <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/20 rounded-full blur-3xl"></div>
               </div>
             </div>
           </div>
@@ -257,20 +279,20 @@ export default function Home() {
       </section>
 
       {/* 4. JOURNEY CARDS SECTION */}
-      <section className="bg-[#f9fafb] py-12 px-6 flex-grow">
+      <section className="bg-[#f5f5f0] py-20 px-6 flex-grow">
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-[#1b1b1b] mb-2">
+          <div className="mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 tracking-tight mb-4">
               Start with what you need
             </h2>
-            <p className="text-gray-600">
+            <p className="text-base text-gray-500">
               Each journey guides you through a specific life moment.
             </p>
           </div>
 
-          {/* Cards - 3 columns on desktop */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
+          {/* Cards - 2 columns on desktop, horizontal rows */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
             {journeys.map((journey) => (
               <JourneyCard key={journey.id} journey={journey} />
             ))}
@@ -279,90 +301,85 @@ export default function Home() {
       </section>
 
       {/* 5. FOOTER */}
-      <footer className="bg-[#333333] py-12 px-6">
+      <footer className="bg-[#1a1a1a] py-16 px-6">
         <div className="max-w-7xl mx-auto">
           {/* 4-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* Column 1 - VA Info */}
             <div>
-              <h3 className="text-white font-bold mb-4 text-lg">
-                U.S. Department of<br />Veterans Affairs
+              <h3 className="text-lg font-semibold text-white mb-4">
+                U.S. Department of Veterans Affairs
               </h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Contact us</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Find a VA location</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">1-800-827-1000</a></li>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Contact us</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Find a VA location</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">1-800-827-1000</a></li>
               </ul>
             </div>
 
             {/* Column 2 - Health Care */}
             <div>
-              <h3 className="text-white font-bold mb-4">Health Care</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Apply for health care</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">My HealtheVet</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Prescriptions</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Mental health</a></li>
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Health Care</h3>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Apply for health care</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">My HealtheVet</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Prescriptions</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Mental health</a></li>
               </ul>
             </div>
 
             {/* Column 3 - Benefits */}
             <div>
-              <h3 className="text-white font-bold mb-4">Benefits</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Disability</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Education (GI Bill)</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Careers & employment</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Housing assistance</a></li>
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Benefits</h3>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Disability</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Education (GI Bill)</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Careers & employment</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Housing assistance</a></li>
               </ul>
             </div>
 
             {/* Column 4 - Resources */}
             <div>
-              <h3 className="text-white font-bold mb-4">Resources</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">VSO finder</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Life insurance</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Burials & memorials</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white text-sm">Family & caregiver</a></li>
+              <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Resources</h3>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">VSO finder</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Life insurance</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Burials & memorials</a></li>
+                <li><a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">Family & caregivers</a></li>
               </ul>
             </div>
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-gray-600 pt-6">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-              <div className="flex flex-wrap justify-center gap-4 text-gray-400">
-                <a href="#" className="hover:text-white">Accessibility</a>
-                <a href="#" className="hover:text-white">Privacy</a>
-                <a href="#" className="hover:text-white">FOIA</a>
-                <a href="#" className="hover:text-white">No FEAR Act</a>
-                <a href="#" className="hover:text-white">USA.gov</a>
-              </div>
-              <p className="text-gray-400">
-                A{' '}
-                <a href="https://friendsfromthecity.com" className="text-white hover:underline" target="_blank" rel="noopener noreferrer">
-                  Friends Innovation Lab
-                </a>
-                {' '}prototype
+          <div className="border-t border-[#333] pt-6 mt-12">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <p className="text-[13px] text-gray-500">
+                © 2026 U.S. Department of Veterans Affairs
               </p>
+              <div className="flex flex-wrap justify-center gap-4 text-[13px] text-gray-500">
+                <a href="#" className="hover:text-white transition-colors">Accessibility</a>
+                <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-white transition-colors">FOIA</a>
+                <a href="#" className="hover:text-white transition-colors">No FEAR Act</a>
+              </div>
             </div>
           </div>
         </div>
       </footer>
 
-      {/* 6. REVIEWER MODE Toggle */}
+      {/* 6. REVIEWER MODE Toggle - Pill shape */}
       <button
         onClick={() => setReviewerMode(!reviewerMode)}
-        className="fixed bottom-5 text-sm px-4 py-2 rounded-lg shadow-lg z-50 transition-all duration-300 font-medium flex items-center gap-2"
+        className="fixed bottom-6 z-50 flex items-center gap-2 px-4 py-2 rounded-full shadow-lg transition-all duration-300 text-sm font-medium"
         style={{
-          right: reviewerMode ? '340px' : '20px',
+          right: reviewerMode ? '340px' : '24px',
           backgroundColor: reviewerMode ? '#003f72' : 'white',
           color: reviewerMode ? '#ffffff' : '#333333',
-          border: reviewerMode ? 'none' : '1px solid #e5e7eb',
+          border: reviewerMode ? 'none' : '1px solid #e5e5e5',
         }}
       >
-        👁️ Reviewer Mode {reviewerMode ? 'ON' : 'OFF'}
+        👁 Reviewer Mode {reviewerMode ? 'ON' : 'OFF'}
       </button>
 
       {/* Reviewer Mode Sidebar Panel */}
