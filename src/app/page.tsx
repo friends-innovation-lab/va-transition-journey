@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
   Briefcase,
@@ -13,13 +12,14 @@ import {
   Home as HomeIcon,
   Menu,
   ArrowRight,
+  Search,
 } from 'lucide-react';
 
 const journeys = [
   {
     id: 'transition',
     title: 'Leaving the Military',
-    description: 'Your personalized checklist for a successful transition to civilian life.',
+    description: 'Navigate your transition with a personalized timeline covering benefits enrollment, career preparation, healthcare setup, and everything you need before and after separation.',
     icon: Briefcase,
     active: true,
     href: '/transition',
@@ -27,35 +27,35 @@ const journeys = [
   {
     id: 'claims',
     title: 'Filing a Claim',
-    description: 'Track your disability claim status and submit evidence.',
+    description: 'File disability claims, upload supporting evidence, track your status in real-time, and understand each step of the decision process.',
     icon: FileText,
     active: false,
   },
   {
     id: 'healthcare',
     title: 'Getting Care',
-    description: 'Enroll in VA health care, schedule appointments, and manage prescriptions.',
+    description: 'Enroll in VA health care, find and schedule appointments, manage prescriptions, message your care team, and access your health records.',
     icon: Heart,
     active: false,
   },
   {
     id: 'education',
     title: 'Education Benefits',
-    description: 'Use your GI Bill benefits and track your remaining entitlement.',
+    description: 'Apply for GI Bill benefits, compare schools, track your remaining entitlement, manage housing payments, and transfer benefits to dependents.',
     icon: GraduationCap,
     active: false,
   },
   {
     id: 'crisis',
     title: 'Crisis Support',
-    description: 'Immediate help and resources when you need them most.',
+    description: 'Connect immediately with crisis counselors, find local Vet Centers, access mental health resources, and get support for yourself or a Veteran you know.',
     icon: Phone,
     active: false,
   },
   {
     id: 'endoflife',
     title: 'End of Life',
-    description: 'Plan burial benefits and support for your family.',
+    description: 'Plan burial arrangements, apply for survivor benefits, access memorial services, and ensure your family receives the support they\'ve earned.',
     icon: HomeIcon,
     active: false,
   },
@@ -66,22 +66,22 @@ function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
 
   const cardContent = (
     <div
-      className={`flex items-start gap-6 py-8 border-t border-[#e5e5e5] transition-all duration-200 ${
+      className={`flex items-start gap-5 py-8 px-4 border-t border-[#e5e5e5] transition-all duration-200 ${
         journey.active
           ? 'opacity-100 hover:bg-[#fafaf8] cursor-pointer'
-          : 'opacity-50 cursor-default'
+          : 'opacity-60 cursor-default'
       }`}
     >
-      {/* Icon - 80px with gradient for active */}
+      {/* Icon - 64px flat blue */}
       <div
-        className={`flex-shrink-0 w-20 h-20 rounded-2xl flex items-center justify-center ${
+        className={`flex-shrink-0 w-16 h-16 rounded-xl flex items-center justify-center ${
           journey.active
-            ? 'bg-gradient-to-br from-[#667eea] to-[#764ba2]'
-            : 'bg-[#e5e5e5]'
+            ? 'bg-[#dbeafe]'
+            : 'bg-[#f3f4f6]'
         }`}
       >
         <Icon
-          className={`w-9 h-9 ${journey.active ? 'text-white' : 'text-[#9ca3af]'}`}
+          className={`w-7 h-7 ${journey.active ? 'text-[#0071bc]' : 'text-[#9ca3af]'}`}
           strokeWidth={1.5}
         />
       </div>
@@ -89,27 +89,27 @@ function JourneyCard({ journey }: { journey: typeof journeys[0] }) {
       {/* Content */}
       <div className="flex-grow min-w-0">
         {/* Title row with arrow */}
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-xl font-semibold text-gray-900">
+        <div className="flex items-center gap-2 mb-2">
+          <h3 className="text-lg font-semibold text-[#111827]">
             {journey.title}
           </h3>
           {journey.active && (
-            <span className="text-gray-400 text-xl">→</span>
+            <span className="text-[#9ca3af]">→</span>
           )}
         </div>
 
         {/* Description */}
-        <p className="text-[15px] text-gray-500 leading-relaxed mb-4 max-w-lg">
+        <p className="text-[15px] text-[#4b5563] leading-relaxed mb-4">
           {journey.description}
         </p>
 
         {/* Action */}
         {journey.active ? (
-          <span className="text-[15px] font-medium text-gray-900 border-b-2 border-[#f59e0b] hover:border-[#d97706] pb-0.5 inline-block">
+          <span className="text-[15px] font-medium text-[#111827] border-b-2 border-[#f59e0b] hover:border-[#d97706] pb-0.5 inline-block">
             Start Journey
           </span>
         ) : (
-          <span className="text-xs font-medium uppercase tracking-wide text-gray-400">
+          <span className="text-[11px] font-medium uppercase tracking-wider text-[#9ca3af]">
             Coming Soon
           </span>
         )}
@@ -133,53 +133,49 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* 1. CRISIS BANNER - NOT sticky, right-aligned */}
-      <div className="bg-[#c4262e] text-white h-10 px-6 flex items-center justify-end">
+      {/* 1. CRISIS BANNER - Left aligned */}
+      <div className="bg-[#c4262e] text-white h-10 px-6 lg:px-12 flex items-center">
         <span className="text-sm">
           <span className="font-semibold">Veterans Crisis Line:</span>{' '}
-          <a href="tel:988" className="underline">Call 988 (Press 1)</a>
+          <a href="tel:988" className="underline text-white">Call 988 (Press 1)</a>
           {' | '}
-          <a href="sms:838255" className="underline">Text 838255</a>
+          <a href="sms:838255" className="underline text-white">Text 838255</a>
         </span>
       </div>
 
       {/* 2. HEADER - STICKY */}
       <header className="sticky top-0 z-50 bg-white border-b border-[#e5e5e5] h-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 h-full flex items-center justify-between">
-          {/* Left - Logo with seal and text */}
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/va-logo-official.png"
-              alt="VA | U.S. Department of Veterans Affairs"
-              width={240}
-              height={53}
-              className="h-10 w-auto"
-              priority
-            />
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-full flex items-center justify-between">
+          {/* Left - VA.gov text logo */}
+          <Link href="/" className="text-[22px] font-bold text-[#003f72]">
+            VA.gov
           </Link>
 
           {/* Center - Main Nav (hidden on mobile) */}
-          <nav className="hidden md:flex items-center gap-8">
-            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
+          <nav className="hidden lg:flex items-center gap-8">
+            <a href="#" className="text-[15px] font-medium text-[#4b5563] hover:text-[#111827]">
               Health Care
             </a>
-            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
+            <a href="#" className="text-[15px] font-medium text-[#4b5563] hover:text-[#111827]">
               Benefits
             </a>
-            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
+            <a href="#" className="text-[15px] font-medium text-[#4b5563] hover:text-[#111827]">
               About VA
-            </a>
-            <a href="#" className="text-[15px] font-medium text-gray-600 hover:text-gray-900">
-              Find a Location
             </a>
           </nav>
 
-          {/* Right - Sign In & Mobile Menu */}
+          {/* Right - Search, Contact, Sign In */}
           <div className="flex items-center gap-4">
-            <Button className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2.5 rounded-md">
+            <button className="hidden md:block p-2 text-[#6b7280] hover:text-[#111827]">
+              <Search className="w-5 h-5" />
+            </button>
+            <a href="#" className="hidden md:block text-[15px] text-[#4b5563] hover:text-[#111827]">
+              Contact
+            </a>
+            <Button className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2 rounded-md">
               Sign in
             </Button>
-            <button className="md:hidden p-2 text-gray-600 hover:text-gray-900">
+            <button className="lg:hidden p-2 text-[#4b5563] hover:text-[#111827]">
               <Menu className="w-6 h-6" />
             </button>
           </div>
@@ -188,16 +184,16 @@ export default function Home() {
 
       {/* 3. HERO SECTION */}
       <section
-        className="relative min-h-[500px] flex items-center py-20 px-6"
+        className="relative min-h-[500px] flex items-center py-20 px-6 lg:px-12"
         style={{
           background: 'linear-gradient(135deg, #003f72 0%, #0071bc 100%)',
         }}
       >
-        <div className="max-w-7xl mx-auto w-full">
+        <div className="max-w-[1400px] mx-auto w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column - 55% */}
+            {/* Left Column */}
             <div className="lg:col-span-1">
-              <h1 className="text-5xl lg:text-[48px] font-bold text-white tracking-tight leading-tight mb-6">
+              <h1 className="text-[48px] font-bold text-white tracking-tight leading-tight mb-6">
                 Your VA journey<br />starts here
               </h1>
               <p className="text-lg text-white/80 max-w-lg mb-8">
@@ -231,15 +227,15 @@ export default function Home() {
                       <Briefcase className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">Transition Checklist</p>
-                      <p className="text-xs text-gray-500">12 months before separation</p>
+                      <p className="text-sm font-semibold text-[#111827]">Transition Checklist</p>
+                      <p className="text-xs text-[#6b7280]">12 months before separation</p>
                     </div>
                   </div>
 
                   {/* Progress */}
                   <div className="mb-6">
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-gray-600">Progress</span>
+                      <span className="text-[#4b5563]">Progress</span>
                       <span className="font-semibold text-[#0071bc]">75%</span>
                     </div>
                     <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -255,7 +251,7 @@ export default function Home() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span className="text-sm text-gray-700">Register for TAP class</span>
+                      <span className="text-sm text-[#374151]">Register for TAP class</span>
                     </div>
                     <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
                       <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
@@ -263,16 +259,16 @@ export default function Home() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span className="text-sm text-gray-700">Request medical records</span>
+                      <span className="text-sm text-[#374151]">Request medical records</span>
                     </div>
                     <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border-2 border-[#0071bc]">
                       <div className="w-5 h-5 border-2 border-[#0071bc] rounded-full flex-shrink-0"></div>
-                      <span className="text-sm text-gray-900 font-medium">Schedule VA benefits briefing</span>
+                      <span className="text-sm text-[#111827] font-medium">Schedule VA benefits briefing</span>
                       <ArrowRight className="w-4 h-4 text-[#0071bc] ml-auto" />
                     </div>
                     <div className="flex items-center gap-3 p-3 rounded-lg">
                       <div className="w-5 h-5 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
-                      <span className="text-sm text-gray-400">Create eBenefits account</span>
+                      <span className="text-sm text-[#9ca3af]">Create eBenefits account</span>
                     </div>
                   </div>
                 </div>
@@ -287,20 +283,20 @@ export default function Home() {
       </section>
 
       {/* 4. JOURNEY CARDS SECTION */}
-      <section className="bg-[#f5f5f0] py-20 px-6 flex-grow">
-        <div className="max-w-5xl mx-auto">
+      <section className="bg-[#f5f5f0] py-20 px-6 lg:px-12 flex-grow">
+        <div className="max-w-[1200px] mx-auto">
           {/* Section Header */}
           <div className="mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 tracking-tight mb-4">
+            <h2 className="text-[40px] font-bold text-[#111827] tracking-tight mb-4">
               Start with what you need
             </h2>
-            <p className="text-base text-gray-500">
+            <p className="text-[17px] text-[#4b5563]">
               Each journey guides you through a specific life moment.
             </p>
           </div>
 
-          {/* Cards - 2 columns on desktop, horizontal rows */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16">
+          {/* Cards - 3 columns on desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
             {journeys.map((journey) => (
               <JourneyCard key={journey.id} journey={journey} />
             ))}
@@ -309,8 +305,8 @@ export default function Home() {
       </section>
 
       {/* 5. FOOTER */}
-      <footer className="bg-[#1a1a1a] py-16 px-6">
-        <div className="max-w-7xl mx-auto">
+      <footer className="bg-[#1a1a1a] py-16 px-6 lg:px-12">
+        <div className="max-w-[1400px] mx-auto">
           {/* 4-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             {/* Column 1 - VA Info */}
@@ -319,42 +315,42 @@ export default function Home() {
                 U.S. Department of Veterans Affairs
               </h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Contact us</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Find a VA location</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">1-800-827-1000</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Contact us</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Find a VA location</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">1-800-827-1000</a></li>
               </ul>
             </div>
 
             {/* Column 2 - Health Care */}
             <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Health Care</h3>
+              <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">Health Care</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Apply for health care</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">My HealtheVet</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Prescriptions</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Mental health</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Apply for health care</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">My HealtheVet</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Prescriptions</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Mental health</a></li>
               </ul>
             </div>
 
             {/* Column 3 - Benefits */}
             <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Benefits</h3>
+              <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">Benefits</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Disability</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Education (GI Bill)</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Careers & employment</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Housing assistance</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Disability</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Education (GI Bill)</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Careers & employment</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Housing assistance</a></li>
               </ul>
             </div>
 
             {/* Column 4 - Resources */}
             <div>
-              <h3 className="text-sm font-semibold text-white uppercase tracking-wide mb-4">Resources</h3>
+              <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">Resources</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">VSO finder</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Life insurance</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Burials & memorials</a></li>
-                <li><a href="#" className="text-sm text-white/80 hover:text-white transition-colors">Family & caregivers</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">VSO finder</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Life insurance</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Burials & memorials</a></li>
+                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Family & caregivers</a></li>
               </ul>
             </div>
           </div>
@@ -362,10 +358,10 @@ export default function Home() {
           {/* Bottom Bar */}
           <div className="border-t border-[#333] pt-6 mt-12">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-[13px] text-white/70">
+              <p className="text-[13px] text-[#6b7280]">
                 © 2026 U.S. Department of Veterans Affairs
               </p>
-              <div className="flex flex-wrap justify-center gap-4 text-[13px] text-white/70">
+              <div className="flex flex-wrap justify-center gap-4 text-[13px] text-[#6b7280]">
                 <a href="#" className="hover:text-white transition-colors">Accessibility</a>
                 <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
                 <a href="#" className="hover:text-white transition-colors">FOIA</a>
