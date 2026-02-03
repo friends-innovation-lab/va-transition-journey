@@ -199,47 +199,34 @@ export default function Home() {
         {/* Hero Content */}
         <div className="flex-grow flex items-center py-20 px-6 lg:px-12">
           <div className="max-w-[1400px] mx-auto w-full">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
-              {/* Left side - Text */}
-              <div className="max-w-2xl">
-                <h1 className="mb-3">
-                  <span className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] font-bold">
-                    Thank you for your service.
-                  </span>
-                  <span
-                    className="block text-[32px] text-white leading-[1.3] mt-3"
-                    style={{ fontFamily: 'var(--font-instrument-serif)', fontStyle: 'italic' }}
-                  >
-                    Now let us serve you.
-                  </span>
-                </h1>
-                <p className="text-lg text-white max-w-xl mt-6 mb-8">
-                  Tell us where you are, and we&apos;ll show you exactly what to do next.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Button
-                    onClick={() => document.getElementById('journeys')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-7 py-3.5 rounded-lg text-base h-auto"
-                  >
-                    Find your journey
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="bg-transparent border border-white/50 text-white hover:bg-white/10 px-7 py-3.5 rounded-lg text-base h-auto"
-                  >
-                    Sign in
-                  </Button>
-                </div>
-              </div>
-
-              {/* Right side - Stat */}
-              <div className="hidden lg:block text-right">
-                <p className="text-[72px] font-bold text-white leading-none">
-                  19 million
-                </p>
-                <p className="text-lg text-white/80 mt-2">
-                  Veterans served
-                </p>
+            <div className="max-w-2xl">
+              <h1 className="mb-3">
+                <span className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] font-bold">
+                  You served your country.
+                </span>
+                <span
+                  className="block text-[38px] text-white leading-[1.3] mt-3"
+                  style={{ fontFamily: 'var(--font-instrument-serif)', fontStyle: 'italic' }}
+                >
+                  Let us return the favor.
+                </span>
+              </h1>
+              <p className="text-lg text-white max-w-xl mt-6 mb-8">
+                Tell us where you are, and we&apos;ll show you exactly what to do next.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button
+                  onClick={() => document.getElementById('journeys')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-7 py-3.5 rounded-lg text-base h-auto"
+                >
+                  Find your journey
+                </Button>
+                <Button
+                  variant="outline"
+                  className="bg-transparent border border-white/50 text-white hover:bg-white/10 px-7 py-3.5 rounded-lg text-base h-auto"
+                >
+                  Sign in
+                </Button>
               </div>
             </div>
           </div>
@@ -285,18 +272,9 @@ export default function Home() {
         <div className="max-w-[1400px] mx-auto">
           {/* 5-Column Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
-            {/* Column 1 - VA Info with Logo */}
+            {/* Column 1 - VA Info */}
             <div>
-              <Image
-                src="/va-header-logo.png"
-                alt="VA Seal"
-                width={512}
-                height={114}
-                className="h-10 w-auto mb-4 brightness-0 invert"
-              />
-              <h3 className="text-base font-semibold text-white mb-4">
-                U.S. Department of Veterans Affairs
-              </h3>
+              <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">Contact</h3>
               <ul className="space-y-3">
                 <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Contact us</a></li>
                 <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Find a VA location</a></li>
