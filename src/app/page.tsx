@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -180,6 +180,26 @@ export default function Home() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
+  // Check localStorage for auth state on mount
+  useEffect(() => {
+    const authState = localStorage.getItem('va-auth');
+    if (authState === 'true') {
+      setIsSignedIn(true);
+    }
+  }, []);
+
+  const handleSignIn = () => {
+    setIsSignedIn(true);
+    localStorage.setItem('va-auth', 'true');
+  };
+
+  const handleSignOut = () => {
+    setIsSignedIn(false);
+    setShowDropdown(false);
+    localStorage.removeItem('va-auth');
+    localStorage.removeItem('va-profile-data');
+  };
+
   const handleMockJourneyClick = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
@@ -261,10 +281,7 @@ export default function Home() {
                         Your Profile
                       </Link>
                       <button
-                        onClick={() => {
-                          setIsSignedIn(false);
-                          setShowDropdown(false);
-                        }}
+                        onClick={handleSignOut}
                         className="block w-full text-left px-4 py-2 text-sm text-[#374151] hover:bg-[#f5f5f0]"
                       >
                         Sign out
@@ -275,7 +292,7 @@ export default function Home() {
               </div>
             ) : (
               <Button
-                onClick={() => setIsSignedIn(true)}
+                onClick={handleSignIn}
                 className="bg-[#0071bc] hover:bg-[#005a9e] text-white text-sm font-medium px-5 py-2 rounded-md"
               >
                 Sign in
@@ -343,7 +360,7 @@ export default function Home() {
                 </Button>
                 {!isSignedIn && (
                   <Button
-                    onClick={() => setIsSignedIn(true)}
+                    onClick={handleSignIn}
                     variant="outline"
                     className="bg-transparent border border-white/50 text-white hover:bg-white/10 px-7 py-3.5 rounded-lg text-base h-auto"
                   >

@@ -1,8 +1,16 @@
 'use client';
 
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function SignInPage() {
+  const router = useRouter();
+
+  const handleSignIn = () => {
+    localStorage.setItem('va-auth', 'true');
+    sessionStorage.setItem('va-profile-first-visit', 'true');
+    router.push('/transition/profile');
+  };
+
   return (
     <div className="flex-grow flex items-center justify-center py-16 px-6">
       <div className="w-full max-w-[450px]">
@@ -19,8 +27,8 @@ export default function SignInPage() {
           {/* Sign-in Buttons */}
           <div className="space-y-4">
             {/* Login.gov */}
-            <Link
-              href="/transition/profile"
+            <button
+              onClick={handleSignIn}
               className="w-full h-14 flex items-center justify-center gap-3 px-6 bg-[#112e51] rounded-lg hover:bg-[#1a4480] transition-colors"
             >
               <div className="w-6 h-6 bg-[#e21c3d] rounded flex items-center justify-center flex-shrink-0">
@@ -29,18 +37,18 @@ export default function SignInPage() {
                 </svg>
               </div>
               <span className="text-white font-semibold">Sign in with Login.gov</span>
-            </Link>
+            </button>
 
             {/* ID.me */}
-            <Link
-              href="/transition/profile"
+            <button
+              onClick={handleSignIn}
               className="w-full h-14 flex items-center justify-center gap-3 px-6 bg-[#2d8633] rounded-lg hover:bg-[#236b29] transition-colors"
             >
               <div className="w-6 h-6 bg-white rounded flex items-center justify-center flex-shrink-0">
                 <span className="text-[#2d8633] font-bold text-xs">ID</span>
               </div>
               <span className="text-white font-semibold">Sign in with ID.me</span>
-            </Link>
+            </button>
           </div>
 
           {/* Create Account */}
@@ -68,13 +76,13 @@ export default function SignInPage() {
 
           {/* Skip Link */}
           <div className="text-center">
-            <Link
-              href="/transition/profile"
+            <button
+              onClick={handleSignIn}
               className="text-sm text-[#6b7280] hover:text-[#374151] hover:underline inline-flex items-center gap-1"
             >
               Skip for now
               <span>→</span>
-            </Link>
+            </button>
           </div>
         </div>
       </div>

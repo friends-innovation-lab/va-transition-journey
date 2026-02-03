@@ -48,13 +48,26 @@ export default function ProfilePage() {
   const [errors, setErrors] = useState<{ maritalStatus?: boolean; dependents?: boolean }>({});
   const [shake, setShake] = useState(false);
 
-  // Check if user has saved profile data (returning via dropdown)
+  // Check if this is first visit (from sign-in) or returning
   useEffect(() => {
-    const savedProfile = localStorage.getItem('va-profile-data');
-    if (savedProfile) {
-      const data = JSON.parse(savedProfile);
-      setMaritalStatus(data.maritalStatus || '');
-      setDependents(data.dependents || '');
+    const isFirstVisit = sessionStorage.getItem('va-profile-first-visit');
+
+    if (isFirstVisit) {
+      // First visit from sign-in - clear flag, show empty fields
+      sessionStorage.removeItem('va-profile-first-visit');
+      // Fields already initialized as empty strings
+    } else {
+      // Returning visit - check for saved data, otherwise use mock data
+      const savedProfile = localStorage.getItem('va-profile-data');
+      if (savedProfile) {
+        const data = JSON.parse(savedProfile);
+        setMaritalStatus(data.maritalStatus || '');
+        setDependents(data.dependents || '');
+      } else {
+        // No saved data, use mock data for returning users
+        setMaritalStatus('married');
+        setDependents('2');
+      }
     }
   }, []);
 
