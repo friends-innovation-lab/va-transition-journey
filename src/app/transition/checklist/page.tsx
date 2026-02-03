@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Check, ChevronRight, X, ArrowRight } from 'lucide-react';
+import { Check, ChevronRight, X, ArrowRight, AlertTriangle } from 'lucide-react';
+import { useErrorSimulation } from '@/context/ErrorSimulationContext';
 
 interface OnboardingData {
   separationDate: string;
@@ -99,6 +100,7 @@ const checklistItems: ChecklistItem[] = [
 ];
 
 export default function ChecklistPage() {
+  const { simulateErrors } = useErrorSimulation();
   const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(null);
   const [checklist, setChecklist] = useState(checklistItems);
   const [showSuccess, setShowSuccess] = useState(true);
@@ -186,6 +188,16 @@ export default function ChecklistPage() {
             {completedCount} of {filteredChecklist.length} tasks completed
           </p>
         </div>
+
+        {/* Error simulation banner */}
+        {simulateErrors && (
+          <div className="bg-[#fef3c7] border border-[#f59e0b] rounded-lg p-4 mb-4 flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-[#d97706] flex-shrink-0 mt-0.5" />
+            <span className="text-sm text-[#92400e]">
+              Having trouble syncing your progress. Changes will save when connection is restored.
+            </span>
+          </div>
+        )}
 
         {/* Checklist */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden">

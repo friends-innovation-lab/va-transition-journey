@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, Search, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ErrorSimulationProvider, useErrorSimulation } from '@/context/ErrorSimulationContext';
 
 // Breadcrumb configuration for each route
 const breadcrumbConfig: Record<string, { label: string; href?: string }[]> = {
@@ -36,7 +37,31 @@ const breadcrumbConfig: Record<string, { label: string; href?: string }[]> = {
   ],
 };
 
-export default function TransitionLayout({
+function ErrorSimulationToggle() {
+  const { simulateErrors, setSimulateErrors } = useErrorSimulation();
+
+  return (
+    <div className="fixed bottom-4 left-4 z-50 bg-white/90 backdrop-blur-sm rounded-lg shadow-md border border-[#e5e5e5] px-3 py-2">
+      <label className="flex items-center gap-2 cursor-pointer">
+        <span className="text-xs text-[#6b7280]">Simulate errors</span>
+        <button
+          onClick={() => setSimulateErrors(!simulateErrors)}
+          className={`relative w-9 h-5 rounded-full transition-colors ${
+            simulateErrors ? 'bg-[#ef4444]' : 'bg-[#d1d5db]'
+          }`}
+        >
+          <span
+            className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
+              simulateErrors ? 'translate-x-4' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </label>
+    </div>
+  );
+}
+
+function TransitionLayoutInner({
   children,
 }: {
   children: React.ReactNode;
@@ -258,6 +283,21 @@ export default function TransitionLayout({
           </div>
         </div>
       </footer>
+
+      {/* Error Simulation Toggle */}
+      <ErrorSimulationToggle />
     </div>
+  );
+}
+
+export default function TransitionLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ErrorSimulationProvider>
+      <TransitionLayoutInner>{children}</TransitionLayoutInner>
+    </ErrorSimulationProvider>
   );
 }

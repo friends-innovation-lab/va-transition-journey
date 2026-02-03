@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check } from 'lucide-react';
+import { Check, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useErrorSimulation } from '@/context/ErrorSimulationContext';
 
 const profileData = {
   name: 'Marcus Johnson',
@@ -39,15 +40,50 @@ const maritalStatusOptions = [
 
 export default function ProfilePage() {
   const router = useRouter();
+  const { simulateErrors } = useErrorSimulation();
   const [maritalStatus, setMaritalStatus] = useState('');
   const [dependents, setDependents] = useState('');
   const [showToast, setShowToast] = useState(false);
+  const [errors, setErrors] = useState<{ maritalStatus?: boolean; dependents?: boolean }>({});
+  const [shake, setShake] = useState(false);
 
   const handleContinue = () => {
+    const newErrors: { maritalStatus?: boolean; dependents?: boolean } = {};
+
+    if (!maritalStatus) {
+      newErrors.maritalStatus = true;
+    }
+    if (!dependents) {
+      newErrors.dependents = true;
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      return;
+    }
+
+    // Clear errors and show toast
+    setErrors({});
     setShowToast(true);
     setTimeout(() => {
       router.push('/transition/onboarding');
     }, 1500);
+  };
+
+  const handleMaritalStatusChange = (value: string) => {
+    setMaritalStatus(value);
+    if (value) {
+      setErrors(prev => ({ ...prev, maritalStatus: false }));
+    }
+  };
+
+  const handleDependentsChange = (value: string) => {
+    setDependents(value);
+    if (value) {
+      setErrors(prev => ({ ...prev, dependents: false }));
+    }
   };
 
   return (
@@ -78,7 +114,17 @@ export default function ProfilePage() {
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-10">
           {/* Left Column - Profile Card */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className={`bg-white rounded-xl shadow-sm p-6 ${shake ? 'animate-shake' : ''}`}>
+            {/* Error simulation banner */}
+            {simulateErrors && (
+              <div className="bg-[#fef3c7] border border-[#f59e0b] rounded-lg p-3 mb-6 flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-[#d97706] flex-shrink-0 mt-0.5" />
+                <span className="text-sm text-[#92400e]">
+                  We couldn&apos;t retrieve all your information. Some fields may need manual entry.
+                </span>
+              </div>
+            )}
+
             <div className="flex items-center justify-between mb-6">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
                 Your Veteran Profile
@@ -103,8 +149,16 @@ export default function ProfilePage() {
 
             {/* Contact info */}
             <div className="space-y-3">
-              <ProfileField label="Email" value={profileData.email} />
-              <ProfileField label="Phone" value={profileData.phone} />
+              <ProfileField
+                label="Email"
+                value={simulateErrors ? 'Unable to load' : profileData.email}
+                disabled={simulateErrors}
+              />
+              <ProfileField
+                label="Phone"
+                value={simulateErrors ? 'Unable to load' : profileData.phone}
+                disabled={simulateErrors}
+              />
             </div>
 
             {/* Divider */}
@@ -112,36 +166,58 @@ export default function ProfilePage() {
 
             {/* Editable fields */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <label className="text-sm text-[#6b7280]">Marital status</label>
-                <select
-                  value={maritalStatus}
-                  onChange={(e) => setMaritalStatus(e.target.value)}
-                  className="w-40 px-3 py-1.5 text-sm rounded-md border border-[#d1d5db] text-[#374151] bg-white focus:border-[#0071bc] focus:outline-none"
-                >
-                  <option value="">Select...</option>
-                  {maritalStatusOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className={`text-sm ${errors.maritalStatus ? 'text-[#dc2626]' : 'text-[#6b7280]'}`}>
+                    Marital status
+                  </label>
+                  <select
+                    value={maritalStatus}
+                    onChange={(e) => handleMaritalStatusChange(e.target.value)}
+                    className={`w-40 px-3 py-1.5 text-sm rounded-md border text-[#374151] focus:outline-none transition-colors ${
+                      errors.maritalStatus
+                        ? 'border-[#ef4444] bg-[#fef2f2] focus:border-[#ef4444]'
+                        : 'border-[#d1d5db] bg-white focus:border-[#0071bc]'
+                    }`}
+                  >
+                    <option value="">Select...</option>
+                    {maritalStatusOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {errors.maritalStatus && (
+                  <p className="text-xs text-[#dc2626] mt-1 text-right">Please select an option</p>
+                )}
               </div>
 
-              <div className="flex items-center justify-between">
-                <label className="text-sm text-[#6b7280]">Dependents</label>
-                <select
-                  value={dependents}
-                  onChange={(e) => setDependents(e.target.value)}
-                  className="w-40 px-3 py-1.5 text-sm rounded-md border border-[#d1d5db] text-[#374151] bg-white focus:border-[#0071bc] focus:outline-none"
-                >
-                  <option value="">Select...</option>
-                  {dependentOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className={`text-sm ${errors.dependents ? 'text-[#dc2626]' : 'text-[#6b7280]'}`}>
+                    Dependents
+                  </label>
+                  <select
+                    value={dependents}
+                    onChange={(e) => handleDependentsChange(e.target.value)}
+                    className={`w-40 px-3 py-1.5 text-sm rounded-md border text-[#374151] focus:outline-none transition-colors ${
+                      errors.dependents
+                        ? 'border-[#ef4444] bg-[#fef2f2] focus:border-[#ef4444]'
+                        : 'border-[#d1d5db] bg-white focus:border-[#0071bc]'
+                    }`}
+                  >
+                    <option value="">Select...</option>
+                    {dependentOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {errors.dependents && (
+                  <p className="text-xs text-[#dc2626] mt-1 text-right">Please select an option</p>
+                )}
               </div>
             </div>
           </div>
@@ -183,6 +259,18 @@ export default function ProfilePage() {
           </Button>
         </div>
       </div>
+
+      {/* Shake animation styles */}
+      <style jsx global>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+          20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+        .animate-shake {
+          animation: shake 0.5s ease-in-out;
+        }
+      `}</style>
     </div>
   );
 }
@@ -191,15 +279,23 @@ function ProfileField({
   label,
   value,
   highlight = false,
+  disabled = false,
 }: {
   label: string;
   value: string;
   highlight?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <div className="flex justify-between items-center py-1">
       <span className="text-sm text-[#6b7280]">{label}</span>
-      <span className={`text-sm ${highlight ? 'text-[#0071bc] font-medium' : 'text-[#111827]'}`}>
+      <span className={`text-sm ${
+        disabled
+          ? 'text-[#9ca3af] italic'
+          : highlight
+            ? 'text-[#0071bc] font-medium'
+            : 'text-[#111827]'
+      }`}>
         {value}
       </span>
     </div>

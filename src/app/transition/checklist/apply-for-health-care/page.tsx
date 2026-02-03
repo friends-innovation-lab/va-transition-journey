@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Check, Square, Phone, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Check, Square, Phone, MessageCircle, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useErrorSimulation } from '@/context/ErrorSimulationContext';
 
 const requirements = [
   { text: 'Social Security Number', checked: false },
@@ -20,7 +21,9 @@ const prefilledData = [
 ];
 
 export default function ApplyForHealthCarePage() {
+  const { simulateErrors } = useErrorSimulation();
   const [showToast, setShowToast] = useState(false);
+  const [prefilledExpanded, setPrefilledExpanded] = useState(false);
 
   const handleMarkComplete = () => {
     setShowToast(true);
@@ -28,6 +31,13 @@ export default function ApplyForHealthCarePage() {
   };
 
   const readyCount = requirements.filter(r => r.checked).length;
+
+  // Modify prefilled data for error simulation
+  const displayedPrefilledData = simulateErrors
+    ? prefilledData.map((item, index) =>
+        index === 1 || index === 3 ? { ...item, value: '—' } : item
+      )
+    : prefilledData;
 
   return (
     <div className="flex-grow py-8 px-6">
@@ -54,13 +64,56 @@ export default function ApplyForHealthCarePage() {
         </Link>
 
         {/* Title Area */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <h1 className="text-[28px] font-bold text-[#111827] mb-3">
             Apply for VA Health Care
           </h1>
           <span className="inline-flex items-center px-3 py-1.5 bg-[#f3f4f6] rounded-full text-sm text-[#6b7280]">
             ~20 minutes
           </span>
+        </div>
+
+        {/* Collapsible Pre-filled Section */}
+        <div className="mb-4">
+          <button
+            onClick={() => setPrefilledExpanded(!prefilledExpanded)}
+            className="w-full bg-[#ecfdf5] rounded-xl border-l-4 border-l-[#10b981] p-4 flex items-center justify-between hover:bg-[#d1fae5] transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 bg-[#10b981] rounded-full flex items-center justify-center flex-shrink-0">
+                <Check className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm font-medium text-[#065f46]">Pre-filled from your profile</span>
+            </div>
+            {prefilledExpanded ? (
+              <ChevronUp className="w-5 h-5 text-[#065f46]" />
+            ) : (
+              <ChevronDown className="w-5 h-5 text-[#065f46]" />
+            )}
+          </button>
+
+          {prefilledExpanded && (
+            <div className="bg-[#ecfdf5] border-l-4 border-l-[#10b981] rounded-b-xl px-4 pb-4 -mt-2 pt-2">
+              {simulateErrors && (
+                <div className="bg-[#fef3c7] border border-[#f59e0b] rounded-lg p-3 mb-3 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-[#d97706] flex-shrink-0 mt-0.5" />
+                  <span className="text-xs text-[#92400e]">
+                    Couldn&apos;t load some profile data. You may need to enter a few details manually.
+                  </span>
+                </div>
+              )}
+              <div className="grid grid-cols-2 gap-4">
+                {displayedPrefilledData.map((item) => (
+                  <div key={item.label}>
+                    <span className="text-xs text-[#6b7280] block mb-1">{item.label}</span>
+                    <span className={`text-sm font-medium ${item.value === '—' ? 'text-[#9ca3af] italic' : 'text-[#111827]'}`}>
+                      {item.value}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Card: Why This Matters */}
@@ -74,7 +127,7 @@ export default function ApplyForHealthCarePage() {
         </div>
 
         {/* Card: What You'll Need */}
-        <div className="bg-white rounded-xl border border-[#e5e5e5] p-6 mb-4">
+        <div className="bg-white rounded-xl border border-[#e5e5e5] p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
               What You&apos;ll Need
@@ -99,21 +152,6 @@ export default function ApplyForHealthCarePage() {
                     <span className="text-[#22c55e] ml-1">({req.note} ✓)</span>
                   )}
                 </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Card: Pre-filled From Your Profile */}
-        <div className="bg-[#ecfdf5] rounded-xl border-l-4 border-l-[#10b981] p-6 mb-8">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#065f46] mb-4">
-            Pre-filled From Your Profile
-          </h2>
-          <div className="grid grid-cols-2 gap-4">
-            {prefilledData.map((item) => (
-              <div key={item.label}>
-                <span className="text-xs text-[#6b7280] block mb-1">{item.label}</span>
-                <span className="text-sm text-[#111827] font-medium">{item.value}</span>
               </div>
             ))}
           </div>
