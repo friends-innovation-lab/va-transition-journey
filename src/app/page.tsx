@@ -200,56 +200,69 @@ export default function Home() {
         <div className="flex-grow flex items-center py-20 px-6 lg:px-12">
           <div className="max-w-[1400px] mx-auto w-full">
             <div className="max-w-3xl">
-              <h1
-                className="text-[56px] text-white leading-[1.15] tracking-[-0.02em] mb-6"
-                style={{ fontFamily: 'var(--font-instrument-serif)', fontStyle: 'italic' }}
-              >
-                Your service was unique.<br />
-                Your VA experience should be too.
+              <h1 className="mb-6">
+                <span className="block text-[52px] text-white leading-[1.15] tracking-[-0.02em] font-semibold">
+                  Your service was unique.
+                </span>
+                <span
+                  className="block text-[58px] text-white leading-[1.15] tracking-[-0.02em]"
+                  style={{ fontFamily: 'var(--font-instrument-serif)', fontStyle: 'italic' }}
+                >
+                  Your VA experience should be too.
+                </span>
               </h1>
               <p className="text-lg text-white/80 max-w-xl mt-6 mb-8">
                 Tell us where you are, and we&apos;ll show you exactly what to do next.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
+                  onClick={() => document.getElementById('journeys')?.scrollIntoView({ behavior: 'smooth' })}
                   className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-7 py-3.5 rounded-lg text-base h-auto"
                 >
-                  Start your checklist
+                  Find your journey
                 </Button>
                 <Button
                   variant="outline"
                   className="bg-transparent border border-white/50 text-white hover:bg-white/10 px-7 py-3.5 rounded-lg text-base h-auto"
                 >
-                  Sign in to continue
+                  Sign in
                 </Button>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Veterans Portrait Strip */}
-        <div className="w-full">
-          <Image
-            src="/veterans-banner.png"
-            alt="Portraits of Veterans"
-            width={1920}
-            height={200}
-            className="w-full h-auto"
-            priority
+        {/* Veterans Portrait Strip - with gradient fade */}
+        <div className="relative w-full">
+          <div
+            className="absolute inset-x-0 top-0 h-16 z-10"
+            style={{
+              background: 'linear-gradient(to bottom, #0071bc 0%, transparent 100%)',
+            }}
           />
+          <div className="flex justify-center">
+            <Image
+              src="/veterans-banner.png"
+              alt="Portraits of Veterans"
+              width={1920}
+              height={200}
+              className="w-[85%] h-auto"
+              priority
+            />
+          </div>
         </div>
       </section>
 
       {/* 4. JOURNEY CARDS SECTION */}
-      <section className="bg-[#f5f5f0] py-20 px-6 lg:px-12 flex-grow">
+      <section id="journeys" className="bg-[#f5f5f0] py-20 px-6 lg:px-12 flex-grow">
         <div className="max-w-[1200px] mx-auto">
           {/* Section Header */}
           <div className="mb-12">
             <h2 className="text-[40px] font-bold text-[#111827] tracking-tight mb-4">
-              Start with what you need
+              What brings you here today?
             </h2>
-            <p className="text-[17px] text-[#4b5563]">
-              Each journey guides you through a specific life moment.
+            <p className="text-[17px] text-[#4b5563] max-w-2xl">
+              Choose a journey. We&apos;ll show you exactly what steps to take, what documents you need, and what to expect. All in one place.
             </p>
           </div>
 
@@ -265,17 +278,24 @@ export default function Home() {
       {/* 5. FOOTER */}
       <footer className="bg-[#1a1a1a] py-16 px-6 lg:px-12">
         <div className="max-w-[1400px] mx-auto">
-          {/* 4-Column Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-            {/* Column 1 - VA Info */}
+          {/* 5-Column Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
+            {/* Column 1 - VA Info with Logo */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-4">
+              <Image
+                src="/va-header-logo.png"
+                alt="VA Seal"
+                width={48}
+                height={48}
+                className="h-12 w-12 mb-4 brightness-0 invert"
+              />
+              <h3 className="text-base font-semibold text-white mb-4">
                 U.S. Department of Veterans Affairs
               </h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Contact us</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Find a VA location</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">1-800-827-1000</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Contact us</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Find a VA location</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">1-800-827-1000</a></li>
               </ul>
             </div>
 
@@ -283,10 +303,10 @@ export default function Home() {
             <div>
               <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">Health Care</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Apply for health care</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">My HealtheVet</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Prescriptions</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Mental health</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Apply for health care</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">My HealtheVet</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Prescriptions</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Mental health</a></li>
               </ul>
             </div>
 
@@ -294,10 +314,10 @@ export default function Home() {
             <div>
               <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">Benefits</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Disability</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Education (GI Bill)</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Careers & employment</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Housing assistance</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Disability</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Education (GI Bill)</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Careers & employment</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Housing assistance</a></li>
               </ul>
             </div>
 
@@ -305,10 +325,21 @@ export default function Home() {
             <div>
               <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">Resources</h3>
               <ul className="space-y-3">
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">VSO finder</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Life insurance</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Burials & memorials</a></li>
-                <li><a href="#" className="text-sm text-[#9ca3af] hover:text-white transition-colors">Family & caregivers</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">VSO finder</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Life insurance</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Burials & memorials</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Family & caregivers</a></li>
+              </ul>
+            </div>
+
+            {/* Column 5 - This Demo */}
+            <div>
+              <h3 className="text-[13px] font-semibold text-white uppercase tracking-wider mb-4">This Demo</h3>
+              <ul className="space-y-3">
+                <li><a href="/docs/OPERATING-MODEL.md" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Operating Model</a></li>
+                <li><a href="/docs/ARCHITECTURE.md" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Architecture</a></li>
+                <li><a href="#" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Tech Stack</a></li>
+                <li><a href="https://friendsfromthecity.com" target="_blank" rel="noopener noreferrer" className="text-sm text-[#d1d5db] hover:text-white transition-colors">Friends Innovation Lab ↗</a></li>
               </ul>
             </div>
           </div>
@@ -316,10 +347,10 @@ export default function Home() {
           {/* Bottom Bar */}
           <div className="border-t border-[#333] pt-6 mt-12">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-[13px] text-[#6b7280]">
+              <p className="text-[13px] text-[#d1d5db]">
                 © 2026 U.S. Department of Veterans Affairs
               </p>
-              <div className="flex flex-wrap justify-center gap-4 text-[13px] text-[#6b7280]">
+              <div className="flex flex-wrap justify-center gap-4 text-[13px] text-[#d1d5db]">
                 <a href="#" className="hover:text-white transition-colors">Accessibility</a>
                 <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
                 <a href="#" className="hover:text-white transition-colors">FOIA</a>
