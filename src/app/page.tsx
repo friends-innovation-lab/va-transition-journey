@@ -9,8 +9,8 @@ import {
   FileText,
   Heart,
   GraduationCap,
-  Phone,
   Home as HomeIcon,
+  Flower2,
   Menu,
   Search,
   ChevronDown,
@@ -25,7 +25,7 @@ interface Journey {
   href?: string;
   badge?: {
     text: string;
-    type: 'amber' | 'emerald';
+    type: 'amber' | 'emerald' | 'blue';
   };
 }
 
@@ -37,6 +37,10 @@ const journeys: Journey[] = [
     icon: Briefcase,
     active: true,
     href: '/transition/sign-in',
+    badge: {
+      text: 'In progress — 2 of 5 tasks',
+      type: 'blue',
+    },
   },
   {
     id: 'claims',
@@ -68,17 +72,17 @@ const journeys: Journey[] = [
     active: false,
   },
   {
-    id: 'crisis',
-    title: 'Crisis Support',
-    description: 'Connect immediately with crisis counselors, find local Vet Centers, access mental health resources, and get support for yourself or a Veteran you know.',
-    icon: Phone,
+    id: 'homeloan',
+    title: 'Buying a Home',
+    description: 'Use your VA home loan benefit to buy with no down payment.',
+    icon: HomeIcon,
     active: false,
   },
   {
     id: 'endoflife',
     title: 'End of Life',
     description: 'Plan burial arrangements, apply for survivor benefits, access memorial services, and ensure your family receives the support they\'ve earned.',
-    icon: HomeIcon,
+    icon: Flower2,
     active: false,
   },
 ];
@@ -110,37 +114,42 @@ function JourneyCard({ journey, isSignedIn }: { journey: Journey; isSignedIn: bo
 
       {/* Content */}
       <div className="flex-grow min-w-0">
-        {/* Title row with arrow and badge */}
-        <div className="flex items-center gap-2 mb-2 flex-wrap">
+        {/* Title row with arrow */}
+        <div className="flex items-center gap-2 mb-2">
           <h3 className="text-lg font-semibold text-[#111827]">
             {journey.title}
           </h3>
           {journey.active && (
             <span className="text-[#9ca3af] transition-transform duration-150 ease-out group-hover:translate-x-1.5">→</span>
           )}
-          {/* Cross-journey badge - only show when signed in */}
-          {isSignedIn && journey.badge && (
+        </div>
+
+        {/* Description */}
+        <p className="text-[15px] text-[#4b5563] leading-relaxed mb-3">
+          {journey.description}
+        </p>
+
+        {/* Cross-journey badge - only show when signed in, positioned below description */}
+        {isSignedIn && journey.badge && (
+          <div className="mb-3">
             <span
-              className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+              className={`text-xs font-medium px-2.5 py-1 rounded-full inline-block ${
                 journey.badge.type === 'amber'
                   ? 'bg-[#fef3c7] text-[#b45309]'
-                  : 'bg-[#d1fae5] text-[#047857]'
+                  : journey.badge.type === 'blue'
+                    ? 'bg-[#dbeafe] text-[#1d4ed8]'
+                    : 'bg-[#d1fae5] text-[#047857]'
               }`}
             >
               {journey.badge.text}
             </span>
-          )}
-        </div>
-
-        {/* Description */}
-        <p className="text-[15px] text-[#4b5563] leading-relaxed mb-4">
-          {journey.description}
-        </p>
+          </div>
+        )}
 
         {/* Action */}
         {journey.active ? (
           <span className="text-[15px] font-medium text-[#111827] border-b-2 border-[#f59e0b] hover:border-[#d97706] pb-0.5 inline-block">
-            Start Journey
+            {isSignedIn ? 'Continue Journey' : 'Start Journey'}
           </span>
         ) : (
           <span className="text-[11px] font-medium uppercase tracking-wider text-[#9ca3af]">
@@ -240,7 +249,7 @@ export default function Home() {
                         className="block px-4 py-2 text-sm text-[#374151] hover:bg-[#f5f5f0]"
                         onClick={() => setShowDropdown(false)}
                       >
-                        My Profile
+                        Your Profile
                       </Link>
                       <button
                         onClick={() => {
@@ -281,33 +290,45 @@ export default function Home() {
         <div className="flex-grow flex items-center py-20 px-6 lg:px-12">
           <div className="max-w-[1400px] mx-auto w-full">
             <div className="max-w-2xl">
-              <h1 className="mb-3">
-                <span className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] font-bold">
-                  You served your country.
-                </span>
-                <span
-                  className="block text-[38px] text-white leading-[1.3] mt-3"
-                  style={{ fontFamily: 'var(--font-instrument-serif)', fontStyle: 'italic' }}
-                >
-                  Let us return the favor.
-                </span>
-              </h1>
-              <p className="text-lg text-white max-w-xl mt-6 mb-8">
-                Tell us where you are, and we&apos;ll show you exactly what to do next.
-              </p>
+              {isSignedIn ? (
+                <>
+                  <h1 className="mb-3">
+                    <span className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] font-bold">
+                      Welcome back, Marcus.
+                    </span>
+                  </h1>
+                  <p className="text-lg text-white max-w-xl mt-6 mb-8">
+                    Pick up where you left off, or start something new.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h1 className="mb-3">
+                    <span className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] font-bold">
+                      What brings you here today?
+                    </span>
+                  </h1>
+                  <p className="text-lg text-white max-w-xl mt-6 mb-8">
+                    Choose a journey. We&apos;ll show you exactly what steps to take, what documents you need, and what to expect.
+                  </p>
+                </>
+              )}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   onClick={() => document.getElementById('journeys')?.scrollIntoView({ behavior: 'smooth' })}
                   className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-7 py-3.5 rounded-lg text-base h-auto"
                 >
-                  Find your journey
+                  {isSignedIn ? 'View your journeys' : 'Find your journey'}
                 </Button>
-                <Button
-                  variant="outline"
-                  className="bg-transparent border border-white/50 text-white hover:bg-white/10 px-7 py-3.5 rounded-lg text-base h-auto"
-                >
-                  Sign in
-                </Button>
+                {!isSignedIn && (
+                  <Button
+                    onClick={() => setIsSignedIn(true)}
+                    variant="outline"
+                    className="bg-transparent border border-white/50 text-white hover:bg-white/10 px-7 py-3.5 rounded-lg text-base h-auto"
+                  >
+                    Sign in
+                  </Button>
+                )}
               </div>
             </div>
           </div>

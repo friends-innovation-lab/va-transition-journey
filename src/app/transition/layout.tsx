@@ -146,7 +146,7 @@ function TransitionLayoutInner({
                         className="block px-4 py-2 text-sm text-[#374151] hover:bg-[#f5f5f0]"
                         onClick={() => setShowDropdown(false)}
                       >
-                        My Profile
+                        Your Profile
                       </Link>
                       <Link
                         href="/"

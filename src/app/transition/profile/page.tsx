@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, AlertTriangle } from 'lucide-react';
+import { Check, AlertTriangle, ChevronRight, X } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useErrorSimulation } from '@/context/ErrorSimulationContext';
 
@@ -44,6 +45,7 @@ export default function ProfilePage() {
   const [maritalStatus, setMaritalStatus] = useState('');
   const [dependents, setDependents] = useState('');
   const [showToast, setShowToast] = useState(false);
+  const [statusToast, setStatusToast] = useState<string | null>(null);
   const [errors, setErrors] = useState<{ maritalStatus?: boolean; dependents?: boolean }>({});
   const [shake, setShake] = useState(false);
 
@@ -86,6 +88,11 @@ export default function ProfilePage() {
     }
   };
 
+  const handleStatusClick = (message: string) => {
+    setStatusToast(message);
+    setTimeout(() => setStatusToast(null), 3000);
+  };
+
   return (
     <div className="flex-grow py-12 px-6">
       {/* Toast Notification */}
@@ -96,6 +103,21 @@ export default function ProfilePage() {
               <Check className="w-3 h-3 text-white" />
             </div>
             <span className="text-sm leading-relaxed">Saved to your Veteran Profile. This data is now available across all VA journeys.</span>
+          </div>
+        </div>
+      )}
+
+      {/* Status Toast - Dark bottom-center style */}
+      {statusToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom duration-300">
+          <div className="bg-[#1f2937] text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <span className="text-sm">{statusToast}</span>
+            <button
+              onClick={() => setStatusToast(null)}
+              className="text-[#9ca3af] hover:text-white transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
       )}
@@ -222,29 +244,62 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Right Column - Explanation */}
-          <div className="flex flex-col justify-center">
-            <h2 className="text-2xl font-bold text-[#111827] mb-4">
-              One profile. Every journey.
-            </h2>
+          {/* Right Column - Status Card */}
+          <div className="flex flex-col justify-start">
+            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="px-6 py-4 border-b border-[#e5e5e5]">
+                <h2 className="text-lg font-semibold text-[#111827]">
+                  Your Status Across VA
+                </h2>
+              </div>
 
-            <p className="text-base text-[#4b5563] mb-4 leading-relaxed">
-              This information comes from your service record and existing VA systems. You entered it once — now it follows you everywhere.
-            </p>
-
-            <p className="text-base text-[#4b5563] mb-6 leading-relaxed">
-              When you start a disability claim, apply for health care, or use your GI Bill, this same profile is already there. No repeating yourself. No conflicting records.
-            </p>
-
-            <div className="space-y-3">
-              {benefits.map((benefit) => (
-                <div key={benefit} className="flex items-center gap-3">
-                  <div className="w-5 h-5 bg-[#22c55e] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Check className="w-3 h-3 text-white" />
-                  </div>
-                  <span className="text-[#374151]">{benefit}</span>
+              {/* Transition - Links to checklist */}
+              <Link
+                href="/transition/checklist"
+                className="flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] hover:bg-[#f5f5f0] transition-colors group"
+              >
+                <div>
+                  <div className="text-sm font-medium text-[#111827]">Transition</div>
+                  <div className="text-sm text-[#6b7280]">In progress — 2 of 5 tasks</div>
                 </div>
-              ))}
+                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
+              </Link>
+
+              {/* Disability Claim - Toast */}
+              <button
+                onClick={() => handleStatusClick('Claim tracking coming soon')}
+                className="w-full flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] hover:bg-[#f5f5f0] transition-colors group text-left"
+              >
+                <div>
+                  <div className="text-sm font-medium text-[#111827]">Disability Claim</div>
+                  <div className="text-sm text-[#6b7280]">1 claim in progress</div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
+              </button>
+
+              {/* Health Care - Toast */}
+              <button
+                onClick={() => handleStatusClick('Health care portal coming soon')}
+                className="w-full flex items-center justify-between px-6 py-4 border-b border-[#e5e5e5] hover:bg-[#f5f5f0] transition-colors group text-left"
+              >
+                <div>
+                  <div className="text-sm font-medium text-[#111827]">Health Care</div>
+                  <div className="text-sm text-[#6b7280]">Enrolled</div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
+              </button>
+
+              {/* Education - Toast */}
+              <button
+                onClick={() => handleStatusClick('Education benefits coming soon')}
+                className="w-full flex items-center justify-between px-6 py-4 hover:bg-[#f5f5f0] transition-colors group text-left"
+              >
+                <div>
+                  <div className="text-sm font-medium text-[#111827]">Education</div>
+                  <div className="text-sm text-[#6b7280]">Not started</div>
+                </div>
+                <ChevronRight className="w-5 h-5 text-[#9ca3af] group-hover:text-[#6b7280] transition-colors" />
+              </button>
             </div>
           </div>
         </div>
