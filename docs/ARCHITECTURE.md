@@ -177,6 +177,63 @@ The Veteran Profile is what makes decentralization feel unified to the veteran.
 
 ---
 
+## The Front Door and MyVA: A Unified Approach
+
+### Current State
+
+VA.gov currently has fragmented entry points:
+
+- **VA.gov homepage** — Marketing/navigation organized by benefit type
+- **MyVA dashboard** — Status view (claims, messages, appointments)
+- **My HealtheVet** — Separate health portal (being migrated)
+
+Veterans must learn multiple interfaces. Status lives in one place, 
+action lives in another.
+
+### Proposed Approach
+
+Unify the front door and dashboard into one adaptive experience.
+
+**When NOT signed in:**
+- "What brings you here today?"
+- Generic journey cards — routing based on intent
+- No status, no personalization
+
+**When SIGNED IN:**
+- "Welcome back, Marcus"
+- Same journey cards + YOUR status badges
+- Shows progress across all journeys at a glance
+- Personalized routing — pick up where you left off
+
+### The Veteran Profile as MyVA
+
+Instead of a separate dashboard, the Veteran Profile becomes 
+the unified status view:
+
+| Current (MyVA) | Proposed (Veteran Profile) |
+|----------------|---------------------------|
+| Claims status | Status across all journeys |
+| Health care info | Your data + your progress |
+| Messages | Accessible from Health journey |
+| Payments | Accessible from relevant journey |
+
+**Key shift:** Status is consolidated in your profile. Action is 
+distributed to journey apps. The front door connects them.
+
+### Why This Works
+
+| Pattern | Benefit |
+|---------|---------|
+| Front door adapts to auth state | One URL, personalized experience |
+| Status badges on cards | See progress without leaving context |
+| Profile as status hub | One place for "where am I across VA?" |
+| Journey apps own actions | Go deep when you need to act |
+
+Veterans don't have to learn two interfaces. Signed in = personalized. 
+Not signed in = helpful routing.
+
+══════════════════════════════════════════════════════════════
+
 ## Identity, Sign-In, and Recovery
 
 **Purpose:** Provide secure, veteran-friendly authentication across all journey apps.
