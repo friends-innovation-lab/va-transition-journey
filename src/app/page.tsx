@@ -213,7 +213,7 @@ export default function Home() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white/10 px-6 py-3 rounded-md text-base"
+                  className="bg-white border-white text-[#0071bc] hover:bg-gray-100 px-6 py-3 rounded-md text-base font-semibold"
                 >
                   Sign in to personalize
                 </Button>
