@@ -41,7 +41,7 @@ function ErrorSimulationToggle() {
   const { simulateErrors, setSimulateErrors } = useErrorSimulation();
 
   return (
-    <div className="fixed top-20 right-4 z-40 bg-white/95 backdrop-blur-sm rounded-lg shadow-md border border-[#e5e5e5] px-3 py-2">
+    <div className="fixed top-20 right-4 z-[60] bg-white/95 backdrop-blur-sm rounded-lg shadow-md border border-[#e5e5e5] px-3 py-2">
       <label className="flex items-center gap-2 cursor-pointer">
         <span className="text-xs text-[#6b7280]">Simulate errors</span>
         <button
@@ -174,7 +174,7 @@ function TransitionLayoutInner({
 
       {/* Breadcrumbs */}
       {breadcrumbConfig[pathname] && (
-        <div className="bg-[#f5f5f0] border-b border-[#e5e5e5]">
+        <div className="sticky top-16 z-40 bg-[#f5f5f0] border-b border-[#e5e5e5]">
           <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-3">
             <nav className="flex items-center gap-2 text-sm">
               {breadcrumbConfig[pathname].map((crumb, index) => {
