@@ -305,6 +305,7 @@ The legacy backends (MVI, BGS, VistA, VBMS) are fragile. The current model has t
 | Coordinated deploys | Independent deploys |
 | Org chart navigation | Journey-based navigation |
 | Coupled to backend failures | Graceful degradation |
+| Large teams, slow iteration | Small teams + AI-augmented development |
 
 ---
 
@@ -313,11 +314,43 @@ The legacy backends (MVI, BGS, VistA, VBMS) are fragile. The current model has t
 This repository demonstrates **one journey** — Transitioning Out of Service — built using this architecture:
 
 - Own codebase (this repo)
-- Uses VADS for design consistency
+- Uses VADS design patterns for consistency
 - Deploys independently
 - Journey-based organization
+- Graceful degradation when backends fail
+
+**Build Details:**
+
+| Metric | This Prototype |
+|--------|----------------|
+| Team size | 1 person + AI assistance |
+| Timeline | 2 days |
+| Stack | Next.js, Tailwind, TypeScript |
+| Deployment | Vercel (independent) |
+
+**What this proves:**
+
+A single founder with AI-augmented development tools can build a complete, polished journey experience in 2 days.
+
+Imagine what a small, focused team (3-5 people) could deliver with this approach — shipping independently, iterating on veteran feedback, without waiting on 44 other teams or centralized review gates.
 
 If one journey works, the model scales to all journeys.
+
+---
+
+## Governance Through Tooling
+
+Instead of manual review gates that create queues, enforce standards through automation:
+
+| Manual Gate (Current) | Automated Check (Proposed) |
+|-----------------------|---------------------------|
+| Design review | VADS component linting in CI |
+| Accessibility review | axe-core automated testing |
+| Content review | Content templates + style linting |
+| Staging review | Automated E2E tests + monitoring |
+| Security review | Dependency scanning + SAST |
+
+**Result:** Teams ship when ready. Standards are enforced by code, not calendars.
 
 ---
 
