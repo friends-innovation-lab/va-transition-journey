@@ -159,34 +159,97 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION - Split Layout */}
+      {/* 3. HERO SECTION - BIG and Inviting */}
       <section
-        className="relative"
+        className="relative min-h-[70vh] flex items-center"
         style={{
           background: 'linear-gradient(135deg, #003f72 0%, #0071bc 100%)',
         }}
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row">
-            {/* Left side - 60% */}
-            <div className="lg:w-[60%] py-16 px-6 lg:px-16">
-              <h1 className="text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+        <div className="max-w-7xl mx-auto w-full px-8 lg:px-20 py-16">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            {/* Left side - 55% */}
+            <div className="lg:w-[55%] text-center lg:text-left">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
                 Your VA journey<br />starts here
               </h1>
-              <p className="text-lg text-white/80 max-w-md">
+              <p className="text-xl text-white/90 max-w-lg mx-auto lg:mx-0 mb-8">
                 Choose where you are in your journey. We&apos;ll guide you through every step.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <Button
+                  size="lg"
+                  className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-8 py-6 text-lg"
+                >
+                  Get Started
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-white/50 text-white hover:bg-white/10 px-8 py-6 text-lg"
+                >
+                  Sign in to personalize
+                </Button>
+              </div>
             </div>
 
-            {/* Right side - 40% */}
-            <div className="lg:w-[40%] relative min-h-[200px] lg:min-h-0 flex items-center justify-center bg-white/10">
-              <div className="text-white/60 text-center p-8">
-                <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-white/20 flex items-center justify-center">
-                  <svg className="w-12 h-12 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
+            {/* Right side - 45% */}
+            <div className="lg:w-[45%] w-full max-w-md lg:max-w-none">
+              <div className="relative">
+                {/* Device mockup placeholder */}
+                <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
+                  {/* Tablet frame */}
+                  <div className="bg-[#1a1a1a] rounded-2xl p-4 shadow-2xl">
+                    {/* Screen */}
+                    <div className="bg-white rounded-xl overflow-hidden">
+                      {/* App UI mockup */}
+                      <div className="p-4">
+                        {/* Header bar */}
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="w-8 h-8 bg-[#003f72] rounded"></div>
+                          <div className="h-3 w-20 bg-gray-200 rounded"></div>
+                        </div>
+                        {/* Progress indicator */}
+                        <div className="mb-4">
+                          <div className="h-2 bg-gray-100 rounded-full">
+                            <div className="h-2 w-3/4 bg-[#0071bc] rounded-full"></div>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">75% complete</p>
+                        </div>
+                        {/* Checklist items */}
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                            <div className="h-3 w-32 bg-gray-200 rounded"></div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                            <div className="h-3 w-28 bg-gray-200 rounded"></div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-5 h-5 border-2 border-[#0071bc] rounded-full"></div>
+                            <div className="h-3 w-36 bg-gray-200 rounded"></div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="w-5 h-5 border-2 border-gray-300 rounded-full"></div>
+                            <div className="h-3 w-24 bg-gray-100 rounded"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-sm">Veteran imagery</p>
+                {/* Decorative elements */}
+                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#fac922]/20 rounded-full blur-2xl"></div>
+                <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
               </div>
             </div>
           </div>
