@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
   Briefcase,
@@ -146,9 +147,16 @@ export default function Home() {
       {/* 2. HEADER - STICKY */}
       <header className="sticky top-0 z-50 bg-white border-b border-[#e5e5e5] h-16">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-full flex items-center justify-between">
-          {/* Left - VA.gov text logo */}
-          <Link href="/" className="text-[22px] font-bold text-[#003f72]">
-            VA.gov
+          {/* Left - Official VA logo with seal */}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/va-logo-official.png"
+              alt="VA | U.S. Department of Veterans Affairs"
+              width={200}
+              height={44}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Center - Main Nav (hidden on mobile) */}
