@@ -12,7 +12,6 @@ import {
   Phone,
   Home as HomeIcon,
   Menu,
-  ArrowRight,
   Search,
 } from 'lucide-react';
 
@@ -192,101 +191,52 @@ export default function Home() {
 
       {/* 3. HERO SECTION */}
       <section
-        className="relative min-h-[500px] flex items-center py-20 px-6 lg:px-12"
+        className="relative flex flex-col"
         style={{
           background: 'linear-gradient(135deg, #003f72 0%, #0071bc 100%)',
         }}
       >
-        <div className="max-w-[1400px] mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column */}
-            <div className="lg:col-span-1">
-              <h1 className="text-[48px] font-bold text-white tracking-tight leading-tight mb-6">
-                Your VA journey<br />starts here
+        {/* Hero Content */}
+        <div className="flex-grow flex items-center py-20 px-6 lg:px-12">
+          <div className="max-w-[1400px] mx-auto w-full">
+            <div className="max-w-3xl">
+              <h1
+                className="text-[56px] text-white leading-[1.15] tracking-[-0.02em] mb-6"
+                style={{ fontFamily: 'var(--font-instrument-serif)', fontStyle: 'italic' }}
+              >
+                Your service was unique.<br />
+                Your VA experience should be too.
               </h1>
-              <p className="text-lg text-white/80 max-w-lg mb-8">
-                Choose where you are in your journey. We&apos;ll guide you through every step.
+              <p className="text-lg text-white/80 max-w-xl mt-6 mb-8">
+                Tell us where you are, and we&apos;ll show you exactly what to do next.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
-                  size="lg"
-                  className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-6 py-3 rounded-md text-base"
+                  className="bg-white text-[#003f72] hover:bg-gray-100 font-semibold px-7 py-3.5 rounded-lg text-base h-auto"
                 >
-                  Get Started
+                  Start your checklist
                 </Button>
                 <Button
-                  size="lg"
                   variant="outline"
-                  className="bg-white border-white text-[#0071bc] hover:bg-gray-100 px-6 py-3 rounded-md text-base font-semibold"
+                  className="bg-transparent border border-white/50 text-white hover:bg-white/10 px-7 py-3.5 rounded-lg text-base h-auto"
                 >
-                  Sign in to personalize
+                  Sign in to continue
                 </Button>
-              </div>
-            </div>
-
-            {/* Right Column - Device Mockup */}
-            <div className="lg:col-span-1 hidden lg:flex justify-end">
-              <div className="relative w-full max-w-md">
-                {/* Card/Checklist mockup */}
-                <div className="bg-white rounded-2xl shadow-2xl p-6 transform rotate-2">
-                  {/* Header */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-10 h-10 bg-[#003f72] rounded-lg flex items-center justify-center">
-                      <Briefcase className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-[#111827]">Transition Checklist</p>
-                      <p className="text-xs text-[#6b7280]">12 months before separation</p>
-                    </div>
-                  </div>
-
-                  {/* Progress */}
-                  <div className="mb-6">
-                    <div className="flex justify-between text-sm mb-2">
-                      <span className="text-[#4b5563]">Progress</span>
-                      <span className="font-semibold text-[#0071bc]">75%</span>
-                    </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <div className="h-full w-3/4 bg-gradient-to-r from-[#0071bc] to-[#003f72] rounded-full"></div>
-                    </div>
-                  </div>
-
-                  {/* Checklist items */}
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <span className="text-sm text-[#374151]">Register for TAP class</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                      <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <span className="text-sm text-[#374151]">Request medical records</span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg border-2 border-[#0071bc]">
-                      <div className="w-5 h-5 border-2 border-[#0071bc] rounded-full flex-shrink-0"></div>
-                      <span className="text-sm text-[#111827] font-medium">Schedule VA benefits briefing</span>
-                      <ArrowRight className="w-4 h-4 text-[#0071bc] ml-auto" />
-                    </div>
-                    <div className="flex items-center gap-3 p-3 rounded-lg">
-                      <div className="w-5 h-5 border-2 border-gray-300 rounded-full flex-shrink-0"></div>
-                      <span className="text-sm text-[#9ca3af]">Create eBenefits account</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Decorative elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#fac922]/30 rounded-full blur-2xl"></div>
-                <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/20 rounded-full blur-3xl"></div>
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Veterans Portrait Strip */}
+        <div className="w-full">
+          <Image
+            src="/veterans-banner.png"
+            alt="Portraits of Veterans"
+            width={1920}
+            height={200}
+            className="w-full h-auto"
+            priority
+          />
         </div>
       </section>
 
