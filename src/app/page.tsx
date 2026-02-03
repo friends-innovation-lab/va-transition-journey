@@ -232,24 +232,16 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Veterans Portrait Strip - with gradient fade */}
-        <div className="relative w-full">
-          <div
-            className="absolute inset-x-0 top-0 h-16 z-10"
-            style={{
-              background: 'linear-gradient(to bottom, #0071bc 0%, transparent 100%)',
-            }}
+        {/* Veterans Portrait Strip */}
+        <div className="flex justify-center w-full">
+          <Image
+            src="/veterans-banner.png"
+            alt="Portraits of Veterans"
+            width={1920}
+            height={200}
+            className="w-[85%] h-auto"
+            priority
           />
-          <div className="flex justify-center">
-            <Image
-              src="/veterans-banner.png"
-              alt="Portraits of Veterans"
-              width={1920}
-              height={200}
-              className="w-[85%] h-auto"
-              priority
-            />
-          </div>
         </div>
       </section>
 
