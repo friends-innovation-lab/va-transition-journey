@@ -11,29 +11,28 @@ import { Button } from '@/components/ui/button';
 const breadcrumbConfig: Record<string, { label: string; href?: string }[]> = {
   '/transition/sign-in': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/' },
     { label: 'Sign in' },
   ],
   '/transition/profile': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/' },
+    { label: 'Leaving the Military', href: '/transition' },
     { label: 'Your Profile' },
   ],
   '/transition/onboarding': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/' },
+    { label: 'Leaving the Military', href: '/transition' },
     { label: 'Priorities' },
   ],
   '/transition/checklist': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/' },
+    { label: 'Leaving the Military', href: '/transition' },
     { label: 'Your Checklist' },
   ],
   '/transition/checklist/apply-for-health-care': [
     { label: 'Home', href: '/' },
-    { label: 'Leaving the Military', href: '/' },
+    { label: 'Leaving the Military', href: '/transition' },
     { label: 'Your Checklist', href: '/transition/checklist' },
-    { label: 'Apply for Health Care' },
+    { label: 'Apply for VA Health Care' },
   ],
 };
 
