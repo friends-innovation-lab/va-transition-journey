@@ -302,7 +302,10 @@ export default function Home() {
               {isSignedIn ? (
                 <>
                   <h1 className="mb-3">
-                    <span className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] font-bold">
+                    <span
+                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em]"
+                      style={{ fontFamily: 'var(--font-instrument-serif)' }}
+                    >
                       Welcome back, Marcus.
                     </span>
                   </h1>
@@ -313,12 +316,21 @@ export default function Home() {
               ) : (
                 <>
                   <h1 className="mb-3">
-                    <span className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] font-bold">
-                      What brings you here today?
+                    <span
+                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em]"
+                      style={{ fontFamily: 'var(--font-instrument-serif)' }}
+                    >
+                      You served your country.
+                    </span>
+                    <span
+                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] italic"
+                      style={{ fontFamily: 'var(--font-instrument-serif)' }}
+                    >
+                      Let us return the favor.
                     </span>
                   </h1>
                   <p className="text-lg text-white max-w-xl mt-6 mb-8">
-                    Choose a journey. We&apos;ll show you exactly what steps to take, what documents you need, and what to expect.
+                    What brings you here today? Choose a journey. We&apos;ll show you exactly what steps to take, what documents you need, and what to expect.
                   </p>
                 </>
               )}
@@ -359,15 +371,17 @@ export default function Home() {
       {/* 4. JOURNEY CARDS SECTION */}
       <section id="journeys" className="bg-[#f5f5f0] py-20 px-6 lg:px-12 flex-grow">
         <div className="max-w-[1200px] mx-auto">
-          {/* Section Header */}
-          <div className="mb-12">
-            <h2 className="text-[40px] font-bold text-[#111827] tracking-tight mb-4">
-              What brings you here today?
-            </h2>
-            <p className="text-[17px] text-[#4b5563] max-w-2xl">
-              Choose a journey. We&apos;ll show you exactly what steps to take, what documents you need, and what to expect. All in one place.
-            </p>
-          </div>
+          {/* Section Header - only show for unauthenticated */}
+          {!isSignedIn && (
+            <div className="mb-12">
+              <h2 className="text-[40px] font-bold text-[#111827] tracking-tight mb-4">
+                Your Journeys
+              </h2>
+              <p className="text-[17px] text-[#4b5563] max-w-2xl">
+                Choose a journey. We&apos;ll show you exactly what steps to take, what documents you need, and what to expect.
+              </p>
+            </div>
+          )}
 
           {/* Cards - 3 columns on desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
