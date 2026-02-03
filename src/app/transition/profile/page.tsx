@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Check, AlertTriangle, X } from 'lucide-react';
+import { Check, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useErrorSimulation } from '@/context/ErrorSimulationContext';
 import { JourneyBanner } from '@/components/JourneyBanner';
@@ -42,11 +42,21 @@ const maritalStatusOptions = [
 export default function ProfilePage() {
   const router = useRouter();
   const { simulateErrors } = useErrorSimulation();
-  const [maritalStatus, setMaritalStatus] = useState('married');
-  const [dependents, setDependents] = useState('2');
+  const [maritalStatus, setMaritalStatus] = useState('');
+  const [dependents, setDependents] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [errors, setErrors] = useState<{ maritalStatus?: boolean; dependents?: boolean }>({});
   const [shake, setShake] = useState(false);
+
+  // Check if user has saved profile data (returning via dropdown)
+  useEffect(() => {
+    const savedProfile = localStorage.getItem('va-profile-data');
+    if (savedProfile) {
+      const data = JSON.parse(savedProfile);
+      setMaritalStatus(data.maritalStatus || '');
+      setDependents(data.dependents || '');
+    }
+  }, []);
 
   const handleContinue = () => {
     const newErrors: { maritalStatus?: boolean; dependents?: boolean } = {};
@@ -64,6 +74,9 @@ export default function ProfilePage() {
       setTimeout(() => setShake(false), 500);
       return;
     }
+
+    // Save to localStorage
+    localStorage.setItem('va-profile-data', JSON.stringify({ maritalStatus, dependents }));
 
     // Clear errors and show toast
     setErrors({});

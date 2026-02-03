@@ -317,7 +317,7 @@ export default function Home() {
                 <>
                   <h1 className="mb-3">
                     <span
-                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em]"
+                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] not-italic font-normal"
                       style={{ fontFamily: 'var(--font-instrument-serif)' }}
                     >
                       You served your country.

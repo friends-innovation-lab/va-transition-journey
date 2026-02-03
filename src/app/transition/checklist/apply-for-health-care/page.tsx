@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Check, Square, Phone, MessageCircle, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useErrorSimulation } from '@/context/ErrorSimulationContext';
@@ -21,6 +22,7 @@ const prefilledData = [
 ];
 
 export default function ApplyForHealthCarePage() {
+  const router = useRouter();
   const { simulateErrors } = useErrorSimulation();
   const [showToast, setShowToast] = useState(false);
   const [showStartToast, setShowStartToast] = useState(false);
@@ -28,7 +30,10 @@ export default function ApplyForHealthCarePage() {
 
   const handleMarkComplete = () => {
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 4000);
+    setTimeout(() => {
+      setShowToast(false);
+      router.push('/');
+    }, 1500);
   };
 
   const handleStartApplication = () => {
