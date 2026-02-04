@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Check, ChevronRight, X, ArrowRight, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { useErrorSimulation } from '@/context/ErrorSimulationContext';
 import { JourneyBanner } from '@/components/JourneyBanner';
+import { useReviewerMode } from '@/context/ReviewerModeContext';
+import { LayerBadge, UXAnnotation, ReviewerModeToggle } from '@/components/ReviewerOverlay';
 
 interface OnboardingData {
   separationDate: string;
@@ -102,6 +104,7 @@ const checklistItems: ChecklistItem[] = [
 
 export default function ChecklistPage() {
   const { simulateErrors } = useErrorSimulation();
+  const { reviewerMode } = useReviewerMode();
   const [onboardingData, setOnboardingData] = useState<OnboardingData | null>(null);
   const [checklist, setChecklist] = useState(checklistItems);
   const [showSuccess, setShowSuccess] = useState(true);
@@ -145,12 +148,26 @@ export default function ChecklistPage() {
 
   return (
     <div className="flex-grow">
-      {/* Journey Banner */}
-      <JourneyBanner
-        journeyName="Leaving the Military"
-        journeyIcon="🎖️"
-        subtitle="Your personalized transition checklist"
+      {/* Layer Badge for Reviewer Mode */}
+      <LayerBadge
+        layerName="Journey App — Autonomous Product"
+        description="Own codebase. Own team. Deploys independently. Uses shared design system and profile data."
       />
+
+      {/* Journey Banner */}
+      <div className="relative">
+        <JourneyBanner
+          journeyName="Leaving the Military"
+          journeyIcon="🎖️"
+          subtitle="Your personalized transition checklist"
+        />
+        {/* Reviewer annotation for journey banner */}
+        {reviewerMode && (
+          <div className="max-w-3xl mx-auto px-6 py-2">
+            <UXAnnotation>Clear context: the Veteran knows which journey they&apos;re in.</UXAnnotation>
+          </div>
+        )}
+      </div>
 
       {/* Success Message */}
       {showSuccess && (
@@ -181,20 +198,28 @@ export default function ChecklistPage() {
       {/* Content */}
       <div className="max-w-3xl mx-auto px-6 py-10">
         {/* Progress */}
-        <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-[#111827]">Your Progress</h2>
-            <span className="text-2xl font-bold text-[#0071bc]">{progress}%</span>
+        <div className="mb-8">
+          {/* Reviewer annotation for progress */}
+          {reviewerMode && (
+            <div className="mb-4">
+              <UXAnnotation>Journey-specific progress tracking. Veteran sees momentum.</UXAnnotation>
+            </div>
+          )}
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-[#111827]">Your Progress</h2>
+              <span className="text-2xl font-bold text-[#0071bc]">{progress}%</span>
+            </div>
+            <div className="h-3 bg-[#e5e5e5] rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#0071bc] rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <p className="text-sm text-[#6b7280] mt-3">
+              {completedCount} of {filteredChecklist.length} tasks completed
+            </p>
           </div>
-          <div className="h-3 bg-[#e5e5e5] rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#0071bc] rounded-full transition-all duration-500"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <p className="text-sm text-[#6b7280] mt-3">
-            {completedCount} of {filteredChecklist.length} tasks completed
-          </p>
         </div>
 
         {/* Error simulation banner */}
@@ -213,9 +238,15 @@ export default function ChecklistPage() {
             <h2 className="text-lg font-semibold text-[#111827]">
               Your Checklist
             </h2>
+            {/* Reviewer annotation for task list */}
+            {reviewerMode && (
+              <div className="mt-3">
+                <UXAnnotation>Personalized based on service record, separation date, and eligibility. Not a generic checklist.</UXAnnotation>
+              </div>
+            )}
           </div>
           <div className="divide-y divide-[#e5e5e5]">
-            {filteredChecklist.map((item) => {
+            {filteredChecklist.map((item, index) => {
               const ItemWrapper = item.href ? Link : 'div';
               const wrapperProps = item.href
                 ? { href: item.href }
@@ -225,16 +256,19 @@ export default function ChecklistPage() {
               const isCompleted = item.completed;
               const isCurrent = item.isCurrent && !item.completed;
 
+              // Show annotation after second completed task
+              const showCompletedAnnotation = reviewerMode && isCompleted && index === 1;
+
               return (
-                <ItemWrapper
-                  key={item.id}
-                  {...(wrapperProps as any)}
-                  className={`w-full text-left px-6 py-5 flex items-start gap-4 transition-colors cursor-pointer block ${
-                    isCurrent
-                      ? 'bg-[#eff6ff] border-l-4 border-l-[#0071bc]'
-                      : 'hover:bg-[#fafafa]'
-                  }`}
-                >
+                <div key={item.id}>
+                  <ItemWrapper
+                    {...(wrapperProps as any)}
+                    className={`w-full text-left px-6 py-5 flex items-start gap-4 transition-colors cursor-pointer block ${
+                      isCurrent
+                        ? 'bg-[#eff6ff] border-l-4 border-l-[#0071bc]'
+                        : 'hover:bg-[#fafafa]'
+                    }`}
+                  >
                   <button
                     onClick={(e) => toggleItem(item.id, e)}
                     className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-colors ${
@@ -277,6 +311,13 @@ export default function ChecklistPage() {
                     }`} />
                   )}
                 </ItemWrapper>
+                {/* Annotation for completed tasks */}
+                {showCompletedAnnotation && (
+                  <div className="px-6 py-3 bg-[#fafafa]">
+                    <UXAnnotation>Tasks auto-completed from profile confirmation and eligibility check.</UXAnnotation>
+                  </div>
+                )}
+              </div>
               );
             })}
           </div>
@@ -284,6 +325,12 @@ export default function ChecklistPage() {
 
         {/* Back to All Journeys */}
         <div className="mt-8">
+          {/* Reviewer annotation for back link */}
+          {reviewerMode && (
+            <div className="mb-3">
+              <UXAnnotation>Easy exit to dashboard. Journeys are parallel, not linear.</UXAnnotation>
+            </div>
+          )}
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-[#6b7280] hover:text-[#374151] transition-colors"
@@ -300,6 +347,9 @@ export default function ChecklistPage() {
           </p>
         </div>
       </div>
+
+      {/* Reviewer Mode Toggle */}
+      <ReviewerModeToggle />
     </div>
   );
 }

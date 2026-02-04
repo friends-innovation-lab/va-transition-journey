@@ -16,6 +16,8 @@ import {
   ChevronDown,
   X,
 } from 'lucide-react';
+import { useReviewerMode } from '@/context/ReviewerModeContext';
+import { LayerBadge, UXAnnotation, ReviewerModeToggle } from '@/components/ReviewerOverlay';
 
 interface Journey {
   id: string;
@@ -175,7 +177,7 @@ function JourneyCard({
 }
 
 export default function Home() {
-  const [reviewerMode, setReviewerMode] = useState(false);
+  const { reviewerMode } = useReviewerMode();
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -305,6 +307,19 @@ export default function Home() {
         </div>
       </header>
 
+      {/* Layer Badge for Reviewer Mode */}
+      {isSignedIn ? (
+        <LayerBadge
+          layerName="Veteran Experience Layer + Shared Platform Layer"
+          description="Status aggregated from all journey apps into unified dashboard"
+        />
+      ) : (
+        <LayerBadge
+          layerName="Veteran Experience Layer"
+          description="Routes Veterans based on what they're trying to do, not VA's org chart"
+        />
+      )}
+
       {/* 3. HERO SECTION */}
       <section
         className="relative flex flex-col"
@@ -318,34 +333,48 @@ export default function Home() {
             <div className="max-w-2xl">
               {isSignedIn ? (
                 <>
-                  <h1 className="mb-3">
-                    <span
-                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em]"
-                      style={{ fontFamily: 'var(--font-instrument-serif)' }}
-                    >
-                      Welcome back, Marcus.
-                    </span>
-                  </h1>
+                  <div className="relative">
+                    <h1 className="mb-3">
+                      <span
+                        className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em]"
+                        style={{ fontFamily: 'var(--font-instrument-serif)' }}
+                      >
+                        Welcome back, Marcus.
+                      </span>
+                    </h1>
+                    {reviewerMode && (
+                      <div className="mt-4 mb-2">
+                        <UXAnnotation>Personalized. VA knows who you are.</UXAnnotation>
+                      </div>
+                    )}
+                  </div>
                   <p className="text-lg text-white max-w-xl mt-6 mb-8">
                     Pick up where you left off, or start something new.
                   </p>
                 </>
               ) : (
                 <>
-                  <h1 className="mb-3">
-                    <span
-                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] not-italic font-normal"
-                      style={{ fontFamily: 'var(--font-instrument-serif)' }}
-                    >
-                      You served your country.
-                    </span>
-                    <span
-                      className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] italic"
-                      style={{ fontFamily: 'var(--font-instrument-serif)' }}
-                    >
-                      Let us return the favor.
-                    </span>
-                  </h1>
+                  <div className="relative">
+                    <h1 className="mb-3">
+                      <span
+                        className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] not-italic font-normal"
+                        style={{ fontFamily: 'var(--font-instrument-serif)' }}
+                      >
+                        You served your country.
+                      </span>
+                      <span
+                        className="block text-[56px] text-white leading-[1.1] tracking-[-0.02em] italic"
+                        style={{ fontFamily: 'var(--font-instrument-serif)' }}
+                      >
+                        Let us return the favor.
+                      </span>
+                    </h1>
+                    {reviewerMode && (
+                      <div className="mt-4 mb-2">
+                        <UXAnnotation>Welcoming tone. Human-centered, not bureaucratic.</UXAnnotation>
+                      </div>
+                    )}
+                  </div>
                   <p className="text-lg text-white max-w-xl mt-6 mb-8">
                     What brings you here today? Choose a journey. We&apos;ll show you exactly what steps to take, what documents you need, and what to expect.
                   </p>
@@ -400,15 +429,48 @@ export default function Home() {
             </div>
           )}
 
+          {/* Reviewer annotation for journey cards */}
+          {reviewerMode && (
+            <div className="mb-6">
+              {isSignedIn ? (
+                <UXAnnotation>THIS IS THE FRONT DOOR VA.GOV SHOULD BE. Journey-based, personalized, status at a glance.</UXAnnotation>
+              ) : (
+                <UXAnnotation>Six journeys based on VEO research. Organized by life moments, not benefit categories.</UXAnnotation>
+              )}
+            </div>
+          )}
+
           {/* Cards - 3 columns on desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0">
-            {journeys.map((journey) => (
-              <JourneyCard
-                key={journey.id}
-                journey={journey}
-                isSignedIn={isSignedIn}
-                onMockJourneyClick={handleMockJourneyClick}
-              />
+            {journeys.map((journey, index) => (
+              <div key={journey.id} className="relative">
+                <JourneyCard
+                  journey={journey}
+                  isSignedIn={isSignedIn}
+                  onMockJourneyClick={handleMockJourneyClick}
+                />
+                {/* Reviewer annotations for specific cards */}
+                {reviewerMode && journey.id === 'transition' && !isSignedIn && (
+                  <div className="px-4 pb-4">
+                    <UXAnnotation>Each journey becomes an autonomous product with its own team, codebase, and deployment.</UXAnnotation>
+                  </div>
+                )}
+                {reviewerMode && isSignedIn && journey.id === 'transition' && (
+                  <div className="px-4 pb-4">
+                    <UXAnnotation>Real-time status from the Journey App. Progress persists.</UXAnnotation>
+                  </div>
+                )}
+                {reviewerMode && isSignedIn && journey.id === 'claims' && (
+                  <div className="px-4 pb-4">
+                    <UXAnnotation>Status from another journey. One Veteran, multiple journeys in parallel.</UXAnnotation>
+                  </div>
+                )}
+                {reviewerMode && isSignedIn && journey.id === 'healthcare' && (
+                  <div className="px-4 pb-4">
+                    <UXAnnotation>Demonstrates: profile enables cross-journey awareness.</UXAnnotation>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -503,75 +565,8 @@ export default function Home() {
         </div>
       )}
 
-      {/* 6. REVIEWER MODE Toggle - Pill shape */}
-      <button
-        onClick={() => setReviewerMode(!reviewerMode)}
-        className="fixed bottom-6 z-50 flex items-center gap-2 px-4 py-2 rounded-full shadow-lg transition-all duration-300 text-sm font-medium"
-        style={{
-          right: reviewerMode ? '340px' : '24px',
-          backgroundColor: reviewerMode ? '#003f72' : 'white',
-          color: reviewerMode ? '#ffffff' : '#333333',
-          border: reviewerMode ? 'none' : '1px solid #e5e5e5',
-        }}
-      >
-        👁 Reviewer Mode {reviewerMode ? 'ON' : 'OFF'}
-      </button>
-
-      {/* Reviewer Mode Sidebar Panel */}
-      <div
-        className="fixed top-0 h-screen w-80 bg-[#1a1a1a] text-white p-6 overflow-y-auto z-40 transition-all duration-300"
-        style={{
-          right: reviewerMode ? 0 : '-320px',
-          boxShadow: reviewerMode ? '-4px 0 24px rgba(0,0,0,0.4)' : 'none',
-        }}
-      >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-[#fac922]">
-            Reviewer Notes
-          </h2>
-          <button
-            onClick={() => setReviewerMode(false)}
-            className="text-white text-2xl hover:text-gray-300 leading-none"
-          >
-            ×
-          </button>
-        </div>
-
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-[#73b3e7] font-bold mb-2 text-xs uppercase tracking-wider">
-              What You&apos;re Seeing
-            </h3>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              A journey-based front door that replaces VA&apos;s org-chart navigation with 6 Veteran life moments. Instead of &quot;Benefits, Health Care, Education...&quot; we ask &quot;What are you trying to do?&quot;
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-[#73b3e7] font-bold mb-2 text-xs uppercase tracking-wider">
-              Why It Matters
-            </h3>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              Veterans think in journeys, not departments. &quot;I&apos;m separating from service&quot; is how they frame their needs — not &quot;I need VBA form 21-526EZ.&quot; This routes them to autonomous apps, not link forests.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-[#73b3e7] font-bold mb-2 text-xs uppercase tracking-wider">
-              The Model
-            </h3>
-            <p className="text-gray-300 text-sm leading-relaxed">
-              Each journey is an independent app with its own team, codebase, and deploy pipeline — sharing only auth, design system, and Veteran profile. Teams ship without waiting on 44 other teams.
-            </p>
-          </div>
-
-          <div className="border-t border-gray-700 pt-4">
-            <p className="text-gray-500 text-sm">
-              Toggle off to see it as a Veteran would.
-            </p>
-          </div>
-        </div>
-      </div>
+      {/* Reviewer Mode Toggle */}
+      <ReviewerModeToggle />
     </div>
   );
 }

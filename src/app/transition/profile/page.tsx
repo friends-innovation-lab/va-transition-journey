@@ -6,6 +6,8 @@ import { Check, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useErrorSimulation } from '@/context/ErrorSimulationContext';
 import { JourneyBanner } from '@/components/JourneyBanner';
+import { useReviewerMode } from '@/context/ReviewerModeContext';
+import { LayerBadge, UXAnnotation, ReviewerModeToggle } from '@/components/ReviewerOverlay';
 
 const profileData = {
   name: 'Marcus Johnson',
@@ -42,6 +44,7 @@ const maritalStatusOptions = [
 export default function ProfilePage() {
   const router = useRouter();
   const { simulateErrors } = useErrorSimulation();
+  const { reviewerMode } = useReviewerMode();
   const [maritalStatus, setMaritalStatus] = useState('');
   const [dependents, setDependents] = useState('');
   const [showToast, setShowToast] = useState(false);
@@ -114,25 +117,32 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex-grow py-8">
-      {/* Toast Notification */}
-      {showToast && (
-        <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
-          <div className="bg-white text-[#166534] px-5 py-4 rounded-lg shadow-lg border border-[#bbf7d0] flex items-start gap-3 max-w-sm">
-            <div className="w-5 h-5 bg-[#22c55e] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Check className="w-3 h-3 text-white" />
-            </div>
-            <span className="text-sm leading-relaxed">Saved to your Veteran Profile. This data is now available across all VA journeys.</span>
-          </div>
-        </div>
-      )}
-
-      {/* Journey Banner */}
-      <JourneyBanner
-        journeyName="Leaving the Military"
-        journeyIcon="🎖️"
-        subtitle="Confirm your information"
+    <div className="flex-grow">
+      {/* Layer Badge for Reviewer Mode */}
+      <LayerBadge
+        layerName="Shared Platform Layer — Veteran Profile + Integration Layer"
+        description="Pulls service record from DoD. Profile data shared across all journeys."
       />
+
+      <div className="py-8">
+        {/* Toast Notification */}
+        {showToast && (
+          <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
+            <div className="bg-white text-[#166534] px-5 py-4 rounded-lg shadow-lg border border-[#bbf7d0] flex items-start gap-3 max-w-sm">
+              <div className="w-5 h-5 bg-[#22c55e] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Check className="w-3 h-3 text-white" />
+              </div>
+              <span className="text-sm leading-relaxed">Saved to your Veteran Profile. This data is now available across all VA journeys.</span>
+            </div>
+          </div>
+        )}
+
+        {/* Journey Banner */}
+        <JourneyBanner
+          journeyName="Leaving the Military"
+          journeyIcon="🎖️"
+          subtitle="Confirm your information"
+        />
 
       <div className="max-w-5xl mx-auto px-6">
         {/* Header */}
@@ -148,35 +158,43 @@ export default function ProfilePage() {
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-10">
           {/* Left Column - Profile Card */}
-          <div className={`bg-white rounded-xl shadow-sm p-6 ${shake ? 'animate-shake' : ''}`}>
-            {/* Error simulation banner */}
-            {simulateErrors && (
-              <div className="bg-[#fef3c7] border border-[#f59e0b] rounded-lg p-3 mb-6 flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-[#d97706] flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-[#92400e]">
-                  We couldn&apos;t retrieve all your information. Some fields may need manual entry.
-                </span>
+          <div>
+            {/* Reviewer annotation for pre-populated data */}
+            {reviewerMode && (
+              <div className="mb-4">
+                <UXAnnotation>SHARED DATA LAYER IN ACTION: Service record pulled from DoD automatically. No manual entry.</UXAnnotation>
               </div>
             )}
 
-            <div className="flex items-center justify-between mb-6">
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
-                Your Veteran Profile
-              </span>
-              <button className="text-sm text-[#0071bc] hover:underline">
-                Edit
-              </button>
-            </div>
+            <div className={`bg-white rounded-xl shadow-sm p-6 ${shake ? 'animate-shake' : ''}`}>
+              {/* Error simulation banner */}
+              {simulateErrors && (
+                <div className="bg-[#fef3c7] border border-[#f59e0b] rounded-lg p-3 mb-6 flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 text-[#d97706] flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-[#92400e]">
+                    We couldn&apos;t retrieve all your information. Some fields may need manual entry.
+                  </span>
+                </div>
+              )}
 
-            {/* Read-only fields from VA */}
-            <div className="space-y-3">
-              <ProfileField label="Name" value={profileData.name} />
-              <ProfileField label="Branch" value={profileData.branch} />
-              <ProfileField label="Rank" value={profileData.rank} />
-              <ProfileField label="Service dates" value={profileData.serviceDates} />
-              <ProfileField label="Separation date" value={profileData.separationDate} />
-              <ProfileField label="Status" value={profileData.status} highlight />
-            </div>
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
+                  Your Veteran Profile
+                </span>
+                <button className="text-sm text-[#0071bc] hover:underline">
+                  Edit
+                </button>
+              </div>
+
+              {/* Read-only fields from VA */}
+              <div className="space-y-3">
+                <ProfileField label="Name" value={profileData.name} />
+                <ProfileField label="Branch" value={profileData.branch} />
+                <ProfileField label="Rank" value={profileData.rank} />
+                <ProfileField label="Service dates" value={profileData.serviceDates} />
+                <ProfileField label="Separation date" value={profileData.separationDate} />
+                <ProfileField label="Status" value={profileData.status} highlight />
+              </div>
 
             {/* Divider */}
             <div className="border-t border-[#e5e5e5] my-5" />
@@ -195,11 +213,18 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-[#e5e5e5] my-5" />
+              {/* Divider */}
+              <div className="border-t border-[#e5e5e5] my-5" />
 
-            {/* Editable fields */}
-            <div className="space-y-4">
+              {/* Reviewer annotation for editable fields */}
+              {reviewerMode && (
+                <div className="mb-4">
+                  <UXAnnotation>Veteran adds only what DoD doesn&apos;t know. Minimal data entry.</UXAnnotation>
+                </div>
+              )}
+
+              {/* Editable fields */}
+              <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between">
                   <label className={`text-sm ${errors.maritalStatus ? 'text-[#dc2626]' : 'text-[#6b7280]'}`}>
@@ -255,9 +280,16 @@ export default function ProfilePage() {
               </div>
             </div>
           </div>
+          </div>
 
           {/* Right Column - Explanation Text */}
           <div className="flex flex-col justify-center">
+            {/* Reviewer annotation for right column */}
+            {reviewerMode && (
+              <div className="mb-4">
+                <UXAnnotation>Single source of truth. Update once, applies to health care, claims, education — everywhere.</UXAnnotation>
+              </div>
+            )}
             <h2 className="text-xl font-bold text-[#111827] mb-4">
               One profile. Every journey.
             </h2>
@@ -271,7 +303,11 @@ export default function ProfilePage() {
         </div>
 
         {/* Continue Button */}
-        <div className="flex justify-end">
+        <div className="flex flex-col items-end gap-4">
+          {/* Reviewer annotation for continue button */}
+          {reviewerMode && (
+            <UXAnnotation>Personalization starts now. Checklist will be tailored to this Veteran&apos;s situation.</UXAnnotation>
+          )}
           <Button
             onClick={handleContinue}
             className="bg-[#22c55e] hover:bg-[#16a34a] text-white font-semibold px-8 py-3 rounded-lg h-auto"
@@ -280,6 +316,10 @@ export default function ProfilePage() {
           </Button>
         </div>
       </div>
+      </div>
+
+      {/* Reviewer Mode Toggle */}
+      <ReviewerModeToggle />
 
       {/* Shake animation styles */}
       <style jsx global>{`

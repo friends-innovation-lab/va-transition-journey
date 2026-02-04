@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+import { ReviewerModeProvider } from "@/context/ReviewerModeContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${instrumentSerif.variable} font-sans antialiased`}>
-        {children}
+        <ReviewerModeProvider>
+          {children}
+        </ReviewerModeProvider>
       </body>
     </html>
   );

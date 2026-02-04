@@ -1,9 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useReviewerMode } from '@/context/ReviewerModeContext';
+import { LayerBadge, UXAnnotation, ReviewerModeToggle } from '@/components/ReviewerOverlay';
 
 export default function SignInPage() {
   const router = useRouter();
+  const { reviewerMode } = useReviewerMode();
 
   const handleSignIn = () => {
     localStorage.setItem('va-auth', 'true');
@@ -12,17 +15,37 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center py-16 px-6">
-      <div className="w-full max-w-[450px]">
-        {/* Card */}
-        <div className="bg-white rounded-xl shadow-sm p-8">
-          {/* Header */}
-          <h1 className="text-2xl font-bold text-[#111827] mb-2">
-            Sign in to continue
-          </h1>
-          <p className="text-[#6b7280] mb-8">
-            We&apos;ll pull your service record from DoD so you don&apos;t have to enter it manually.
-          </p>
+    <div className="flex-grow flex flex-col">
+      {/* Layer Badge for Reviewer Mode */}
+      <LayerBadge
+        layerName="Shared Platform Layer — Authentication"
+        description="Login.gov / ID.me integration shared by all journeys. One sign-in for all of VA."
+      />
+
+      <div className="flex-grow flex items-center justify-center py-16 px-6">
+        <div className="w-full max-w-[450px]">
+          {/* Reviewer annotation */}
+          {reviewerMode && (
+            <div className="mb-4">
+              <UXAnnotation>Shared auth layer. Journey Apps never handle credentials directly.</UXAnnotation>
+            </div>
+          )}
+
+          {/* Card */}
+          <div className="bg-white rounded-xl shadow-sm p-8">
+            {/* Header */}
+            <h1 className="text-2xl font-bold text-[#111827] mb-2">
+              Sign in to continue
+            </h1>
+            <p className="text-[#6b7280] mb-4">
+              We&apos;ll pull your service record from DoD so you don&apos;t have to enter it manually.
+            </p>
+            {/* Reviewer annotation for DoD text */}
+            {reviewerMode && (
+              <div className="mb-6">
+                <UXAnnotation>Preparing the user: their data will already be there.</UXAnnotation>
+              </div>
+            )}
 
           {/* Sign-in Buttons */}
           <div className="space-y-4">
@@ -38,6 +61,12 @@ export default function SignInPage() {
               </div>
               <span className="text-white font-semibold">Sign in with Login.gov</span>
             </button>
+            {/* Reviewer annotation for Login.gov */}
+            {reviewerMode && (
+              <div className="mt-2">
+                <UXAnnotation>Uses VA&apos;s existing identity infrastructure. No new identity system needed.</UXAnnotation>
+              </div>
+            )}
 
             {/* ID.me */}
             <button
@@ -87,5 +116,9 @@ export default function SignInPage() {
         </div>
       </div>
     </div>
+
+    {/* Reviewer Mode Toggle */}
+    <ReviewerModeToggle />
+  </div>
   );
 }
