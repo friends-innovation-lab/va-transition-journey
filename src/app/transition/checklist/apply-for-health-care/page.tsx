@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Check, Square, Phone, MessageCircle, ChevronDown, ChevronUp, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Check, Square, Phone, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useErrorSimulation } from '@/context/ErrorSimulationContext';
+import { useReviewerMode } from '@/context/ReviewerModeContext';
+import { LayerBadge, UXAnnotation, ReviewerModeToggle } from '@/components/ReviewerOverlay';
 
 const requirements = [
   { text: 'Social Security Number', checked: false },
@@ -23,7 +24,7 @@ const prefilledData = [
 
 export default function ApplyForHealthCarePage() {
   const router = useRouter();
-  const { simulateErrors } = useErrorSimulation();
+  const { reviewerMode } = useReviewerMode();
   const [showToast, setShowToast] = useState(false);
   const [showStartToast, setShowStartToast] = useState(false);
   const [prefilledExpanded, setPrefilledExpanded] = useState(false);
@@ -43,15 +44,15 @@ export default function ApplyForHealthCarePage() {
 
   const readyCount = requirements.filter(r => r.checked).length;
 
-  // Modify prefilled data for error simulation
-  const displayedPrefilledData = simulateErrors
-    ? prefilledData.map((item, index) =>
-        index === 1 || index === 3 ? { ...item, value: '—' } : item
-      )
-    : prefilledData;
-
   return (
-    <div className="flex-grow py-8 px-6">
+    <div className="flex-grow">
+      {/* Layer Badge for Reviewer Mode */}
+      <LayerBadge
+        layerName="Journey App — Task Detail"
+        description="Deep-link into a specific task. Journey App orchestrates the experience, hands off to existing VA systems."
+      />
+
+      <div className="py-8 px-6">
       {/* Toast Notification */}
       {showToast && (
         <div className="fixed top-24 right-6 z-50 animate-in slide-in-from-right duration-300">
@@ -114,19 +115,17 @@ export default function ApplyForHealthCarePage() {
 
           {prefilledExpanded && (
             <div className="bg-[#ecfdf5] border-l-4 border-l-[#10b981] rounded-b-xl px-4 pb-4 -mt-2 pt-2">
-              {simulateErrors && (
-                <div className="bg-[#fef3c7] border border-[#f59e0b] rounded-lg p-3 mb-3 flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 text-[#d97706] flex-shrink-0 mt-0.5" />
-                  <span className="text-xs text-[#92400e]">
-                    Couldn&apos;t load some profile data. You may need to enter a few details manually.
-                  </span>
+              {/* Reviewer annotation for pre-filled data */}
+              {reviewerMode && (
+                <div className="mb-3">
+                  <UXAnnotation>Profile data flows through. Veteran doesn&apos;t re-enter information.</UXAnnotation>
                 </div>
               )}
               <div className="grid grid-cols-2 gap-4">
-                {displayedPrefilledData.map((item) => (
+                {prefilledData.map((item) => (
                   <div key={item.label}>
                     <span className="text-xs text-[#6b7280] block mb-1">{item.label}</span>
-                    <span className={`text-sm font-medium ${item.value === '—' ? 'text-[#9ca3af] italic' : 'text-[#111827]'}`}>
+                    <span className="text-sm font-medium text-[#111827]">
                       {item.value}
                     </span>
                   </div>
@@ -137,48 +136,70 @@ export default function ApplyForHealthCarePage() {
         </div>
 
         {/* Card: Why This Matters */}
-        <div className="bg-white rounded-xl border border-[#e5e5e5] p-6 mb-4">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6b7280] mb-3">
-            Why This Matters
-          </h2>
-          <p className="text-[#4b5563] leading-relaxed">
-            As a transitioning service member, you have 5 years of enhanced eligibility for VA health care. Enrolling now ensures no gap in coverage when you separate.
-          </p>
+        <div className="mb-4">
+          {/* Reviewer annotation for contextual messaging */}
+          {reviewerMode && (
+            <div className="mb-3">
+              <UXAnnotation>Context-aware messaging based on Veteran&apos;s situation and timeline.</UXAnnotation>
+            </div>
+          )}
+          <div className="bg-white rounded-xl border border-[#e5e5e5] p-6">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6b7280] mb-3">
+              Why This Matters
+            </h2>
+            <p className="text-[#4b5563] leading-relaxed">
+              As a transitioning service member, you have 5 years of enhanced eligibility for VA health care. Enrolling now ensures no gap in coverage when you separate.
+            </p>
+          </div>
         </div>
 
         {/* Card: What You'll Need */}
-        <div className="bg-white rounded-xl border border-[#e5e5e5] p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
-              What You&apos;ll Need
-            </h2>
-            <span className="text-xs text-[#6b7280]">
-              {readyCount} of {requirements.length} ready
-            </span>
-          </div>
-          <div className="space-y-3">
-            {requirements.map((req, index) => (
-              <div key={index} className="flex items-center gap-3">
-                {req.checked ? (
-                  <div className="w-5 h-5 bg-[#22c55e] rounded flex items-center justify-center flex-shrink-0">
-                    <Check className="w-3 h-3 text-white" />
-                  </div>
-                ) : (
-                  <Square className="w-5 h-5 text-[#d1d5db] flex-shrink-0" />
-                )}
-                <span className={req.checked ? 'text-[#6b7280]' : 'text-[#374151]'}>
-                  {req.text}
-                  {req.note && (
-                    <span className="text-[#22c55e] ml-1">({req.note} ✓)</span>
+        <div className="mb-8">
+          {/* Reviewer annotation for requirements */}
+          {reviewerMode && (
+            <div className="mb-3">
+              <UXAnnotation>Requirements checklist shows what&apos;s ready vs. what the Veteran needs to gather.</UXAnnotation>
+            </div>
+          )}
+          <div className="bg-white rounded-xl border border-[#e5e5e5] p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6b7280]">
+                What You&apos;ll Need
+              </h2>
+              <span className="text-xs text-[#6b7280]">
+                {readyCount} of {requirements.length} ready
+              </span>
+            </div>
+            <div className="space-y-3">
+              {requirements.map((req, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  {req.checked ? (
+                    <div className="w-5 h-5 bg-[#22c55e] rounded flex items-center justify-center flex-shrink-0">
+                      <Check className="w-3 h-3 text-white" />
+                    </div>
+                  ) : (
+                    <Square className="w-5 h-5 text-[#d1d5db] flex-shrink-0" />
                   )}
-                </span>
-              </div>
-            ))}
+                  <span className={req.checked ? 'text-[#6b7280]' : 'text-[#374151]'}>
+                    {req.text}
+                    {req.note && (
+                      <span className="text-[#22c55e] ml-1">({req.note} ✓)</span>
+                    )}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Primary CTA */}
         <div className="text-center mb-4">
+          {/* Reviewer annotation for start button */}
+          {reviewerMode && (
+            <div className="mb-3 text-left">
+              <UXAnnotation>Warm handoff to existing VA systems with data pre-populated.</UXAnnotation>
+            </div>
+          )}
           <Button
             onClick={handleStartApplication}
             className="bg-[#0071bc] hover:bg-[#005a9e] text-white font-semibold px-10 py-4 rounded-lg h-auto text-base shadow-md hover:shadow-lg transition-shadow w-full sm:w-auto sm:min-w-[280px]"
@@ -218,6 +239,10 @@ export default function ApplyForHealthCarePage() {
           </div>
         </div>
       </div>
+      </div>
+
+      {/* Reviewer Mode Toggle */}
+      <ReviewerModeToggle />
     </div>
   );
 }

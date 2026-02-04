@@ -223,16 +223,29 @@ export default function Home() {
       <header className="sticky top-0 z-50 bg-white border-b border-[#e5e5e5] h-16">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-12 h-full flex items-center justify-between">
           {/* Left - Official VA logo with seal */}
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/va-logo-official.png"
-              alt="VA | U.S. Department of Veterans Affairs"
-              width={200}
-              height={44}
-              className="h-10 w-auto"
-              priority
-            />
-          </Link>
+          {isSignedIn ? (
+            <button onClick={handleSignOut} className="flex items-center">
+              <Image
+                src="/va-logo-official.png"
+                alt="VA | U.S. Department of Veterans Affairs"
+                width={200}
+                height={44}
+                className="h-10 w-auto"
+                priority
+              />
+            </button>
+          ) : (
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/va-logo-official.png"
+                alt="VA | U.S. Department of Veterans Affairs"
+                width={200}
+                height={44}
+                className="h-10 w-auto"
+                priority
+              />
+            </Link>
+          )}
 
           {/* Center - Main Nav (hidden on mobile) */}
           <nav className="hidden lg:flex items-center gap-8">
